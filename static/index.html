@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VidAuto</title>
+<style>
+:root {
+  --bg:        #070712;
+  --surface:   #0d0d20;
+  --surface2:  #11112a;
+  --surface3:  #161632;
+  --border:    rgba(120,119,198,0.13);
+  --border-hi: rgba(120,119,198,0.35);
+  --primary:   #818cf8;
+  --primary-d: #6366f1;
+  --glow:      rgba(129,140,248,0.18);
+  --cyan:      #22d3ee;
+  --danger:    #f87171;
+  --danger-bg: rgba(248,113,113,0.08);
+  --success:   #34d399;
+  --text:      #e2e8f0;
+  --muted:     #64748b;
+  --r:         7px;
+  --r-sm:      5px;
+  --ease:      150ms cubic-bezier(.4,0,.2,1);
+  --font:      -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono:      'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dot grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(129,140,248,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+header {
+  position: relative;
+  z-index: 50;
+  background: rgba(13,13,32,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 18px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #818cf8 30%, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.header-sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+
+#headerProjectName {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+#headerProjectName.active { color: var(--text); }
+
+.badge {
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+/* Hidden select (kept for JS compat) */
+#projectSelect { display: none; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font);
+  letter-spacing: 0.1px;
+  transition: all var(--ease);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-d), var(--primary));
+  color: #fff;
+  box-shadow: 0 2px 14px rgba(99,102,241,.35);
+}
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4f46e5, var(--primary-d));
+  box-shadow: 0 2px 22px rgba(99,102,241,.55);
+  transform: translateY(-1px);
+}
+.btn-primary:active:not(:disabled) { transform: none; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--border-hi);
+  background: var(--surface2);
+}
+
+.btn-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(248,113,113,.2);
+}
+.btn-danger:hover:not(:disabled) {
+  background: rgba(248,113,113,.15);
+  border-color: rgba(248,113,113,.4);
+}
+
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+button:disabled { opacity: .3; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.main { position: relative; z-index: 1; display: flex; flex: 1; overflow: hidden; }
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: 210px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-header span {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.project-list { flex: 1; min-height: 0; overflow-y: auto; padding: 6px; }
+
+.project-item {
+  padding: 9px 12px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+  transition: all var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.project-item:hover { background: var(--surface2); }
+.project-item.active {
+  background: var(--surface2);
+  border-color: var(--border);
+}
+.project-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; height: 60%;
+  width: 2px;
+  background: var(--primary);
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 10px var(--primary);
+}
+.proj-name { font-weight: 600; font-size: 12px; margin-bottom: 3px; color: var(--text); }
+.proj-meta { font-size: 10px; color: var(--muted); }
+
+/* ── Workspace ───────────────────────────────────────────────────────────── */
+.workspace { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.welcome {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 14px; color: var(--muted);
+}
+.welcome-icon { font-size: 44px; filter: drop-shadow(0 0 24px rgba(99,102,241,.5)); }
+.welcome h2 { color: var(--text); font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
+.welcome p { font-size: 12px; }
+
+/* ── Tabs ────────────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 1px;
+  padding: 10px 16px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.tab-btn {
+  background: none;
+  color: var(--muted);
+  padding: 7px 16px;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  transition: all var(--ease);
+  letter-spacing: 0.2px;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+.tab-content { display: none; flex: 1; overflow-y: auto; padding: 14px; gap: 10px; }
+.tab-content.active { display: flex; flex-direction: column; }
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+}
+
+.card-title {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 12px;
+}
+
+/* ── Files tab ───────────────────────────────────────────────────────────── */
+.file-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid var(--border);
+}
+.file-row:last-child { border-bottom: none; }
+.file-label { width: 110px; flex-shrink: 0; font-size: 11px; color: var(--muted); }
+.file-name { flex: 1; font-size: 12px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--mono); }
+.file-name.missing { color: var(--danger); opacity: .7; }
+.file-none { color: var(--muted); font-style: italic; font-size: 12px; }
+
+.image-toolbar { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.img-count { font-size: 11px; color: var(--muted); margin-left: auto; }
+.image-list { display: flex; flex-direction: column; gap: 1px; max-height: 280px; overflow-y: auto; }
+.img-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 6px; border-radius: var(--r-sm);
+  transition: background var(--ease);
+}
+.img-row:hover { background: var(--surface2); }
+.img-thumb { width: 30px; height: 30px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); flex-shrink: 0; }
+.img-thumb-placeholder { width: 30px; height: 30px; background: var(--surface3); border-radius: 4px; border: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--muted); }
+.img-name { flex: 1; font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--mono); }
+.img-name.missing { color: var(--danger); opacity: .7; }
+.img-remove { opacity: 0; font-size: 14px; color: var(--muted); background: none; padding: 0 4px; transition: opacity var(--ease), color var(--ease); }
+.img-row:hover .img-remove { opacity: 1; }
+.img-remove:hover { color: var(--danger); }
+
+.drop-zone {
+  border: 1px dashed rgba(129,140,248,.2);
+  border-radius: var(--r);
+  padding: 22px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  transition: all var(--ease);
+  cursor: pointer;
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: rgba(129,140,248,.5);
+  background: var(--glow);
+  color: var(--primary);
+}
+
+/* ── Settings tab ────────────────────────────────────────────────────────── */
+.settings-actions { display: flex; gap: 8px; }
+.settings-grid { display: grid; grid-template-columns: 190px 1fr 1fr; gap: 5px 12px; align-items: center; }
+.settings-section {
+  grid-column: 1/-1;
+  font-size: 9px; font-weight: 700; color: var(--primary);
+  text-transform: uppercase; letter-spacing: 1.2px;
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+}
+.settings-section:first-child { margin-top: 0; border-top: none; }
+.settings-label { font-size: 12px; color: var(--text); }
+.settings-desc { font-size: 10px; color: var(--muted); line-height: 1.4; }
+.settings-grid input, .settings-grid select {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 5px 8px;
+  font-size: 12px; width: 100%;
+  font-family: var(--font);
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+.settings-grid input:focus, .settings-grid select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+
+/* ── Render tab ──────────────────────────────────────────────────────────── */
+.render-output-opts input {
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  padding: 5px 8px; font-size: 12px; font-family: var(--font); width: 100%;
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+.render-output-opts input:focus {
+  outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--glow);
+}
+
+.render-toolbar { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+
+.capacity-line { font-size: 11px; color: var(--muted); margin-top: 10px; }
+
+.job-row { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--surface3); font-size:12px; }
+.job-row:last-child { border-bottom:none; }
+.job-status { display:inline-block; padding:2px 7px; border-radius:8px; font-size:10px; font-weight:600; text-transform:uppercase; }
+.job-status.pending  { background:#f59e0b22; color:#f59e0b; }
+.job-status.running  { background:#3b82f622; color:#3b82f6; }
+.job-status.cancelling { background:#f9731622; color:#f97316; }
+.job-status.done     { background:#10b98122; color:#10b981; }
+.job-status.error    { background:#ef444422; color:#ef4444; }
+.job-status.cancelled,.job-status.stopped { background:#6b728022; color:#9ca3af; }
+.job-info { flex:1; min-width:0; }
+.job-name { font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.job-meta { color:var(--muted); font-size:10px; margin-top:1px; }
+
+.progress-wrap {
+  height: 5px; background: var(--surface3);
+  border-radius: 20px; overflow: hidden; margin-top: 10px;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-d), var(--cyan));
+  border-radius: 20px;
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+  position: relative; overflow: hidden;
+}
+.progress-bar.running::after {
+  content: '';
+  position: absolute; top: 0; left: -60px;
+  width: 60px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+  animation: shimmer 1.2s linear infinite;
+}
+@keyframes shimmer { to { left: 120%; } }
+
+.progress-label { font-size: 10px; color: var(--muted); margin-top: 5px; font-family: var(--mono); }
+
+.log-box {
+  background: #04040d;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  font-family: var(--mono);
+  font-size: 11px; line-height: 1.7;
+  flex: 1; min-height: 200px; max-height: 340px;
+  overflow-y: auto;
+  color: #7dd3fc;
+  white-space: pre-wrap; word-break: break-all;
+}
+.log-err  { color: #f87171 !important; }
+.log-ok   { color: #34d399 !important; }
+.log-cmd  { color: #475569 !important; }
+.log-info { color: #a78bfa !important; }
+
+.output-batch {
+  background: var(--surface2); border-radius: var(--r-sm);
+  padding: 10px 12px; margin-bottom: 6px; border: 1px solid var(--border);
+}
+.batch-title { font-size: 10px; color: var(--muted); margin-bottom: 8px; font-family: var(--mono); }
+.video-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.video-item {
+  background: var(--surface3); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 5px 10px;
+  display: flex; align-items: center; gap: 6px; font-size: 11px;
+  transition: border-color var(--ease);
+}
+.video-item:hover { border-color: var(--border-hi); }
+.video-item a { color: var(--primary); text-decoration: none; font-weight: 600; font-family: var(--mono); }
+.video-item a:hover { color: var(--cyan); }
+
+/* ── Modals ──────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-radius: 10px; padding: 24px;
+  min-width: 340px; display: flex; flex-direction: column; gap: 16px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.6), 0 0 0 1px rgba(129,140,248,.06);
+}
+.modal h3 { font-size: 14px; font-weight: 600; letter-spacing: -.2px; }
+.modal input {
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  padding: 9px 12px; font-size: 13px; width: 100%;
+  font-family: var(--font);
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+.modal input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--glow); }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ── Toast ───────────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 18px; right: 18px; z-index: 200;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 9px 16px; font-size: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  animation: toastIn .18s ease;
+}
+.toast.error  { border-color: rgba(248,113,113,.35); color: var(--danger); }
+.toast.success { border-color: rgba(52,211,153,.35); color: var(--success); }
+@keyframes toastIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+input[type="file"] { display: none; }
+
+/* ── Replace Audio view ──────────────────────────────────────────────────── */
+.ra-header {
+  padding: 0 16px; border-bottom: 1px solid var(--border);
+  background: var(--surface); flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px; height: 42px;
+}
+.ra-body { flex: 1; overflow-y: auto; padding: 14px; gap: 10px; display: flex; flex-direction: column; }
+.ra-grid { display: grid; grid-template-columns: 130px 1fr auto; gap: 7px 10px; align-items: center; }
+.ra-grid label { font-size: 12px; color: var(--muted); }
+.ra-grid input, .ra-grid select {
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  padding: 5px 8px; font-size: 12px; font-family: var(--font); width: 100%;
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+.ra-grid input:focus, .ra-grid select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--glow); }
+.ra-sub { display: grid; grid-template-columns: 130px 1fr auto; gap: 7px 10px; align-items: center; grid-column: 1/-1; }
+
+/* ── Worker status ───────────────────────────────────────────────────────── */
+.worker-pill {
+  display: flex; align-items: center; gap: 5px;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.3px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  transition: all var(--ease);
+}
+.worker-pill.online { border-color: rgba(52,211,153,.35); color: var(--success); background: rgba(52,211,153,.07); }
+.worker-pill.offline { border-color: var(--border); color: var(--muted); }
+.worker-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.worker-pill.online .worker-dot { box-shadow: 0 0 5px var(--success); }
+
+.offline-banner {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── Templates section ───────────────────────────────────────────────────── */
+.tmpl-section {
+  flex-shrink: 0;
+  max-height: 44%;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+}
+.tmpl-list { flex: 1; min-height: 0; overflow-y: auto; padding: 6px; }
+.tmpl-empty { padding: 12px 14px; color: var(--muted); font-size: 11px; text-align: center; }
+
+.tmpl-item {
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+  transition: all var(--ease);
+}
+.tmpl-item:hover { background: var(--surface2); border-color: var(--border); }
+.tmpl-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.tmpl-meta { font-size: 10px; color: var(--muted); margin-bottom: 5px; line-height: 1.5; }
+.tmpl-actions { display: flex; gap: 4px; opacity: 0; transition: opacity var(--ease); }
+.tmpl-item:hover .tmpl-actions { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">VidAuto</div>
+  <select id="projectSelect" onchange="onProjectChange(this.value)"></select>
+  <div class="header-sep"></div>
+  <span id="headerProjectName">Chọn project từ sidebar →</span>
+  <span class="badge" id="projectBadge" style="display:none"></span>
+  <button class="btn-secondary btn-sm" id="btnRename" style="display:none" onclick="showRenameModal()">Rename</button>
+  <button class="btn-secondary btn-sm" id="btnDupProject" style="display:none" onclick="duplicateProject()" title="Duplicate project">⊕ Dup</button>
+  <button class="btn-danger btn-sm" id="btnDelete" style="display:none" onclick="deleteProject()">Delete</button>
+  <div class="worker-pill offline" id="workerPill" title="Trạng thái Mac worker">
+    <span class="worker-dot"></span>
+    <span id="workerLabel">Worker</span>
+  </div>
+  <button class="btn-secondary btn-sm" id="btnReplaceAudio" onclick="toggleReplaceAudioView()">🔊 Replace</button>
+  <button class="btn-primary btn-sm" onclick="showCreateModal()">+ New</button>
+</header>
+
+<div class="main">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <span>Projects</span>
+      <button class="btn-primary btn-sm" onclick="showCreateModal()">+</button>
+    </div>
+    <div class="project-list" id="sidebarList"></div>
+
+    <!-- Template section -->
+    <div class="tmpl-section">
+      <div class="sidebar-header">
+        <span>Templates</span>
+        <button class="btn-primary btn-sm" onclick="showSaveTemplateModal()" title="Lưu project hiện tại làm template">+</button>
+      </div>
+      <div class="tmpl-list" id="templateList">
+        <div class="tmpl-empty">Chưa có template</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workspace -->
+  <div class="workspace" id="workspace">
+  <div id="mainContent" style="display:flex;flex:1;flex-direction:column;overflow:hidden">
+    <div class="welcome" id="welcomeScreen">
+      <div class="welcome-icon">⬡</div>
+      <h2>VidAuto Web</h2>
+      <p>Chọn hoặc tạo project để bắt đầu</p>
+      <button class="btn-primary" style="margin-top:4px" onclick="showCreateModal()">+ Tạo project mới</button>
+    </div>
+
+    <div id="projectWorkspace" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('files')">Files</button>
+        <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
+        <button class="tab-btn" onclick="switchTab('render')">Render</button>
+        <button class="tab-btn" onclick="switchTab('queue')">Queue <span id="queueBadge" style="display:none;background:var(--accent);color:#fff;border-radius:8px;padding:0 5px;font-size:10px;margin-left:3px"></span></button>
+      </div>
+
+      <!-- FILES TAB -->
+      <div class="tab-content active" id="tab-files">
+        <div class="card">
+          <div class="card-title">Images</div>
+          <div class="image-toolbar">
+            <button class="btn-primary btn-sm" onclick="document.getElementById('imgInput').click()">+ Upload</button>
+            <button class="btn-secondary btn-sm" onclick="removeSelectedImages()">Xoá đã chọn</button>
+            <button class="btn-danger btn-sm" onclick="clearAllImages()">Xoá hết</button>
+            <span class="img-count" id="imgCount">0 ảnh</span>
+          </div>
+          <div class="drop-zone" id="dropZone" onclick="document.getElementById('imgInput').click()">
+            Kéo thả ảnh vào đây hoặc click để chọn
+          </div>
+          <div class="image-list" id="imageList" style="margin-top:8px"></div>
+          <input type="file" id="imgInput" multiple accept=".png,.jpg,.jpeg,.webp,.bmp" onchange="uploadImages(this.files)">
+        </div>
+
+        <div class="card">
+          <div class="card-title">Assets</div>
+          <div id="assetRows"></div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div class="tab-content" id="tab-settings">
+        <div class="settings-actions" style="position:sticky;top:0;z-index:10;background:var(--bg);padding-bottom:10px;margin-bottom:2px">
+          <button class="btn-primary" onclick="saveSettings()">Lưu Settings</button>
+          <button class="btn-secondary" onclick="saveAsDefault()">💾 Lưu làm mặc định</button>
+          <button class="btn-secondary" onclick="resetSettings()">↺ Reset mặc định</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Cấu hình render</div>
+          <div class="settings-grid" id="settingsGrid"></div>
+        </div>
+      </div>
+
+      <!-- RENDER TAB -->
+      <div class="tab-content" id="tab-render">
+        <div class="card">
+          <div class="render-output-opts" style="display:grid;grid-template-columns:100px 1fr auto;gap:6px 10px;align-items:center;margin-bottom:12px;font-size:12px">
+            <span style="color:var(--muted)">Tên batch</span>
+            <input id="inputBatchName" type="text" placeholder="Đang tải...">
+            <span></span>
+            <span style="color:var(--muted)">Thư mục lưu</span>
+            <input id="inputOutputDir" type="text" placeholder="Mặc định: output của project" oninput="saveOutputDir(this.value)">
+            <button class="btn-secondary btn-sm" id="btnBrowse" onclick="browseOutputDir()">📂 Browse</button>
+          </div>
+          <div class="offline-banner" id="offlineBanner" style="display:none">
+            🔴 Worker đang offline — chạy worker.py để render
+          </div>
+          <div class="render-toolbar">
+            <button class="btn-primary" id="btnStart" onclick="startRender()">▶ Bắt đầu</button>
+            <button class="btn-danger" id="btnStop" onclick="stopRender()" disabled>■ Dừng</button>
+            <button class="btn-secondary btn-sm" onclick="loadOutputs()">↻ Refresh</button>
+            <button class="btn-secondary btn-sm" onclick="openOutputFolder()">📁 Mở folder</button>
+          </div>
+          <div class="capacity-line">Capacity: <span id="capacityInfo">—</span> &nbsp;·&nbsp; Đã render: <span id="renderedCount">0</span> videos</div>
+          <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+          <div class="progress-label" id="progressLabel">Sẵn sàng.</div>
+        </div>
+
+        <div class="card" style="flex:1;display:flex;flex-direction:column;min-height:0">
+          <div class="card-title">Log</div>
+          <div class="log-box" id="logBox"></div>
+        </div>
+
+        <div class="card" id="outputsCard">
+          <div class="card-title">Output Videos</div>
+          <div id="outputsList"><span style="color:var(--muted);font-size:11px">Chưa có video nào.</span></div>
+        </div>
+      </div>
+
+      <!-- QUEUE TAB -->
+      <div class="tab-content" id="tab-queue">
+        <div class="card" style="flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div class="card-title" style="margin:0">Job Queue</div>
+            <button class="btn-secondary btn-sm" onclick="loadQueue()">↻ Refresh</button>
+          </div>
+          <div id="queueList"><span style="color:var(--muted);font-size:11px">Chưa có job nào.</span></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /mainContent -->
+
+  <!-- Replace Audio View -->
+  <div id="replaceAudioView" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+    <div class="ra-header">
+      <button class="btn-secondary btn-sm" onclick="toggleReplaceAudioView()">← Quay lại</button>
+      <span style="font-size:13px;font-weight:600;color:var(--text)">🔊 Replace Audio</span>
+      <span style="font-size:11px;color:var(--muted)">Thay nhạc + voice cho video có sẵn</span>
+    </div>
+    <div class="ra-body">
+
+      <div class="card">
+        <div class="card-title">Input Videos</div>
+        <div class="ra-grid">
+          <label>Chọn batch</label>
+          <select id="raBatchSelect" onchange="onRaBatchChange(this.value)" style="grid-column:2/4">
+            <option value="">— đang tải... —</option>
+          </select>
+          <label>Thư mục input</label>
+          <input id="raInputDir" type="text" placeholder="/path/to/video/folder">
+          <button class="btn-secondary btn-sm" onclick="browseRaDir('raInputDir')">📂</button>
+          <label>Giới hạn</label>
+          <input id="raLimit" type="text" placeholder="Để trống = tất cả" style="grid-column:2/4">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Audio Source</div>
+        <div class="ra-grid">
+          <label>Nguồn</label>
+          <select id="raAudioSource" onchange="onRaAudioSourceChange(this.value)" style="grid-column:2/4">
+            <option value="project">Từ project</option>
+            <option value="upload">Upload riêng</option>
+          </select>
+          <div id="raProjectSection" class="ra-sub">
+            <label>Project</label>
+            <select id="raProjectSelect" style="grid-column:2/4">
+              <option value="">— chọn project —</option>
+            </select>
+          </div>
+          <div id="raUploadSection" class="ra-sub" style="display:none">
+            <label>Music</label>
+            <span id="raMusicName" style="font-size:12px;font-family:var(--mono);color:var(--muted)">Chưa upload</span>
+            <button class="btn-secondary btn-sm" onclick="uploadRaAudio('music')">Upload</button>
+            <label>Voice</label>
+            <span id="raVoiceName" style="font-size:12px;font-family:var(--mono);color:var(--muted)">Chưa upload</span>
+            <button class="btn-secondary btn-sm" onclick="uploadRaAudio('voice')">Upload</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Settings</div>
+        <div class="ra-grid">
+          <label>Music start (s)</label>
+          <input id="raMusicStart" type="text" value="72" style="grid-column:2/4">
+          <label>Music volume</label>
+          <input id="raMusicVol" type="text" value="0.6" style="grid-column:2/4">
+          <label>Voice volume</label>
+          <input id="raVoiceVol" type="text" value="4.5" style="grid-column:2/4">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Output</div>
+        <div class="ra-grid">
+          <label>Thư mục lưu</label>
+          <input id="raOutputDir" type="text" placeholder="Để trống → tự tạo _replaced bên cạnh input">
+          <button class="btn-secondary btn-sm" onclick="browseRaDir('raOutputDir')">📂</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+          <button class="btn-primary" id="raBtnRun" onclick="runReplaceAudio()">▶ Chạy</button>
+          <button class="btn-danger btn-sm" id="raBtnStop" disabled onclick="stopReplaceAudio()">■ Dừng</button>
+        </div>
+        <div class="progress-wrap"><div class="progress-bar" id="raProgressBar" style="width:0%"></div></div>
+        <div class="progress-label" id="raProgressLabel">Sẵn sàng.</div>
+      </div>
+
+      <div class="card" style="flex:1;display:flex;flex-direction:column;min-height:160px">
+        <div class="card-title">Log</div>
+        <div class="log-box" id="raLogBox"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /workspace -->
+</div><!-- /main -->
+
+<!-- Create modal -->
+<div class="modal-overlay" id="createModal" style="display:none" onclick="if(event.target===this)closeModal('createModal')">
+  <div class="modal">
+    <h3>Tạo project mới</h3>
+    <input type="text" id="newProjectName" placeholder="Tên project..." onkeydown="if(event.key==='Enter')confirmCreate()">
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('createModal')">Huỷ</button>
+      <button class="btn-primary" onclick="confirmCreate()">Tạo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rename modal -->
+<div class="modal-overlay" id="renameModal" style="display:none" onclick="if(event.target===this)closeModal('renameModal')">
+  <div class="modal">
+    <h3>Đổi tên project</h3>
+    <input type="text" id="renameInput" placeholder="Tên mới..." onkeydown="if(event.key==='Enter')confirmRename()">
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('renameModal')">Huỷ</button>
+      <button class="btn-primary" onclick="confirmRename()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Save-as-Template modal -->
+<div class="modal-overlay" id="saveTemplateModal" style="display:none" onclick="if(event.target===this)closeModal('saveTemplateModal')">
+  <div class="modal">
+    <h3>Lưu làm Template</h3>
+    <input type="text" id="templateNameInput" placeholder="Tên template..." onkeydown="if(event.key==='Enter')confirmSaveTemplate()">
+    <div style="font-size:11px;color:var(--muted);line-height:1.6">
+      Sẽ copy từ project hiện tại:<br>
+      <span style="color:var(--text);font-weight:600">Settings · Music · Voice</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('saveTemplateModal')">Huỷ</button>
+      <button class="btn-primary" onclick="confirmSaveTemplate()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rename Template modal -->
+<div class="modal-overlay" id="renameTemplateModal" style="display:none" onclick="if(event.target===this)closeModal('renameTemplateModal')">
+  <div class="modal">
+    <h3>Đổi tên Template</h3>
+    <input type="text" id="renameTemplateInput" placeholder="Tên mới..." onkeydown="if(event.key==='Enter')confirmRenameTemplate()">
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('renameTemplateModal')">Huỷ</button>
+      <button class="btn-primary" onclick="confirmRenameTemplate()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="assetInput" style="display:none">
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+let state = { projects: [], current: null, activeTab: 'files', es: null, selectedImages: new Set() };
+const enc = (s) => encodeURIComponent(s);
+
+const SETTINGS_SPEC = [
+  { section: 'Counts' },
+  { key: 'TOTAL_VIDEOS',       type: 'int',    label: 'Total videos/batch',  desc: 'Số video render mỗi batch' },
+  { key: 'IMAGES_PER_VIDEO',   type: 'int',    label: 'Ảnh/video',           desc: 'Số ảnh dùng cho 1 video' },
+  { key: 'MAX_SAME_IMAGE_PER_POSITION_PER_BATCH', type: 'int', label: 'Max lặp ảnh/vị trí', desc: 'Giới hạn 1 ảnh lặp ở cùng vị trí' },
+  { key: 'RANDOM_SEED',        type: 'int_or_none', label: 'Random seed',    desc: 'Trống = random tự nhiên' },
+  { section: 'Timing' },
+  { key: 'IMAGE_DURATION',     type: 'float',  label: 'Thời lượng ảnh (s)',  desc: 'Mỗi ảnh hiển thị bao lâu' },
+  { key: 'FADE_DURATION',      type: 'float',  label: 'Fade (s)',            desc: 'Thời gian chuyển cảnh' },
+  { section: 'Resolution' },
+  { key: 'WIDTH',              type: 'int',    label: 'Width',               desc: 'Chiều rộng output' },
+  { key: 'HEIGHT',             type: 'int',    label: 'Height',              desc: 'Chiều cao output' },
+  { key: 'FPS',                type: 'int',    label: 'FPS',                 desc: 'Frame per second' },
+  { section: 'Scale' },
+  { key: 'IMAGE_SCALE_MODE',   type: 'choice:fill,fit,fit_blur_bg', label: 'Scale mode', desc: 'Cách scale ảnh (ảnh đúng 9:16 tự dùng fill)' },
+  { key: 'IMAGE_SCALE_PERCENT',type: 'int',    label: 'Scale % ảnh chính',   desc: 'Phóng to ảnh (%)' },
+  { key: 'FIT_BACKGROUND_COLOR',type:'str',    label: 'Màu nền (fit mode)',  desc: '' },
+  { key: 'BLUR_BACKGROUND_STRENGTH', type:'int', label:'Blur nền strength', desc:'8=minimum · 30=mờ nhiều' },
+  { key: 'BLUR_BACKGROUND_BRIGHTNESS', type:'float', label:'Blur nền brightness', desc:'-1 → 1' },
+  { key: 'BLUR_BACKGROUND_SATURATION', type:'float', label:'Blur nền saturation', desc:'' },
+  { section: 'Audio' },
+  { key: 'MUSIC_START_SECONDS',type: 'float',  label: 'Music bỏ qua (s)',    desc: 'Skip N giây đầu nhạc' },
+  { key: 'VOICE_START_SECONDS',type: 'float',  label: 'Voice bắt đầu (s)',   desc: 'Voice bắt đầu ở giây thứ' },
+  { key: 'MUSIC_VOLUME',       type: 'float',  label: 'Volume nhạc',         desc: '0.0 → 2.0' },
+  { key: 'VOICE_VOLUME',       type: 'float',  label: 'Volume voice',        desc: '0.0 → 2.0' },
+  { section: 'Misc' },
+  { key: 'AUTO_CLEAN_TEMP',    type: 'bool',   label: 'Auto clean temp',     desc: 'Xoá _temp sau render thành công' },
+  { section: 'Performance' },
+  { key: 'USE_HW_ENCODER',     type: 'bool',   label: 'Hardware encoder',    desc: 'Dùng VideoToolbox (Apple Silicon) — giảm nóng máy' },
+  { key: 'FFMPEG_THREADS',     type: 'int',    label: 'FFmpeg threads',      desc: '0 = auto · 4–6 để giảm nhiệt' },
+];
+
+const ASSET_CONFIG = [
+  { kind: 'fixed_video', label: 'Fixed video', exts: '.mp4,.mov,.m4v,.mkv,.webm', required: false },
+  { kind: 'music',       label: 'Music',        exts: '.mp3,.wav,.m4a,.aac,.ogg,.flac', required: true },
+  { kind: 'voice',       label: 'Voice',        exts: '.mp3,.wav,.m4a,.aac,.ogg,.flac', required: false },
+  { kind: 'overlay',     label: 'Overlay',      exts: '.mp4,.mov,.m4v,.mkv,.webm', required: false },
+];
+
+// ── API ───────────────────────────────────────────────────────────────────────
+const api = {
+  async get(url)        { const r = await fetch(url); if (!r.ok) throw await r.json(); return r.json(); },
+  async post(url, data) { const r = await fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)}); if (!r.ok) throw await r.json(); return r.json(); },
+  async put(url, data)  { const r = await fetch(url, {method:'PUT',  headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)}); if (!r.ok) throw await r.json(); return r.json(); },
+  async patch(url, data){ const r = await fetch(url, {method:'PATCH',headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)}); if (!r.ok) throw await r.json(); return r.json(); },
+  async del(url, data)  { const r = await fetch(url, {method:'DELETE',headers:{'Content-Type':'application/json'}, body: data ? JSON.stringify(data) : undefined}); if (!r.ok) throw await r.json(); return r.json(); },
+  async upload(url, files) { const fd = new FormData(); for (const f of files) fd.append('files', f); const r = await fetch(url, {method:'POST', body:fd}); if (!r.ok) throw await r.json(); return r.json(); },
+  async uploadSingle(url, file, field='file') { const fd = new FormData(); fd.append(field, file); const r = await fetch(url, {method:'POST', body:fd}); if (!r.ok) throw await r.json(); return r.json(); },
+};
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg, type='') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadProjects();
+  await loadTemplates();
+  pollWorkerStatus();
+  setupDropZone();
+});
+
+// ── Projects ──────────────────────────────────────────────────────────────────
+async function loadProjects() {
+  try {
+    state.projects = await api.get('/api/projects');
+    renderSidebar();
+    renderProjectSelect();
+    if (state.current) {
+      const updated = state.projects.find(p => p.safe === state.current.safe);
+      if (updated) await selectProject(updated.safe, false);
+    }
+  } catch(e) { console.error(e); }
+}
+
+function renderSidebar() {
+  const el = document.getElementById('sidebarList');
+  el.innerHTML = '';
+  if (!state.projects.length) {
+    el.innerHTML = '<div style="padding:16px;color:var(--muted);font-size:11px;text-align:center">Chưa có project nào</div>';
+    return;
+  }
+  for (const p of state.projects) {
+    const div = document.createElement('div');
+    div.className = 'project-item' + (state.current?.safe === p.safe ? ' active' : '');
+    div.innerHTML = `<div class="proj-name">${esc(p.name)}</div>
+      <div class="proj-meta">${p.image_count} ảnh · ${p.rendered_count} rendered</div>`;
+    div.onclick = () => selectProject(p.safe);
+    el.appendChild(div);
+  }
+}
+
+function renderProjectSelect() {
+  const sel = document.getElementById('projectSelect');
+  sel.innerHTML = '<option value="">—</option>';
+  for (const p of state.projects) {
+    const opt = document.createElement('option');
+    opt.value = p.safe; opt.textContent = p.name;
+    sel.appendChild(opt);
+  }
+  if (state.current) sel.value = state.current.safe;
+}
+
+async function selectProject(safe, reload=true) {
+  try {
+    const p = reload ? await api.get(`/api/projects/${enc(safe)}`) : state.projects.find(x => x.safe === safe);
+    if (!p) return;
+    if (state.es) { state.es.close(); state.es = null; }
+    state.current = p;
+    state.selectedImages = new Set();
+    document.getElementById('projectSelect').value = safe;
+    const hdr = document.getElementById('headerProjectName');
+    hdr.textContent = p.name;
+    hdr.className = 'active';
+    document.getElementById('projectBadge').textContent = `${p.image_count} ảnh · ${p.rendered_count} rendered`;
+    document.getElementById('projectBadge').style.display = '';
+    document.getElementById('renderedCount').textContent = p.rendered_count;
+    document.getElementById('btnRename').style.display = '';
+    document.getElementById('btnDupProject').style.display = '';
+    document.getElementById('btnDelete').style.display = '';
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('projectWorkspace').style.display = 'flex';
+    // Restore output dir đã lưu cho project này
+    const _savedDir = localStorage.getItem(`vidauto_output_dir_${safe}`);
+    document.getElementById('inputOutputDir').value = _savedDir || '';
+    resetRenderUI();
+    renderSidebar();
+    renderFiles();
+    renderSettings();
+    if (state.activeTab === 'render') { loadOutputs(); loadCapacity(); loadNextBatchName(); checkRenderStatus(); }
+  } catch(e) { toast('Không tải được project', 'error'); }
+}
+
+function resetRenderUI() {
+  document.getElementById('btnStart').disabled = false;
+  document.getElementById('btnStop').disabled = true;
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('progressBar').classList.remove('running');
+  document.getElementById('progressLabel').textContent = 'Sẵn sàng.';
+  document.getElementById('logBox').innerHTML = '';
+}
+
+function onProjectChange(safe) {
+  if (safe) selectProject(safe);
+  else {
+    state.current = null;
+    document.getElementById('headerProjectName').textContent = 'Chọn project từ sidebar →';
+    document.getElementById('headerProjectName').className = '';
+    document.getElementById('projectBadge').style.display = 'none';
+    document.getElementById('btnRename').style.display = 'none';
+    document.getElementById('btnDupProject').style.display = 'none';
+    document.getElementById('btnDelete').style.display = 'none';
+    document.getElementById('welcomeScreen').style.display = '';
+    document.getElementById('projectWorkspace').style.display = 'none';
+    renderSidebar();
+  }
+}
+
+// ── Modals ────────────────────────────────────────────────────────────────────
+function showCreateModal() {
+  document.getElementById('newProjectName').value = '';
+  document.getElementById('createModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('newProjectName').focus(), 50);
+}
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+async function confirmCreate() {
+  const name = document.getElementById('newProjectName').value.trim();
+  if (!name) return;
+  try {
+    const p = await api.post('/api/projects', { name });
+    closeModal('createModal');
+    state.projects.unshift(p);
+    renderSidebar(); renderProjectSelect();
+    await selectProject(p.safe);
+    toast('Đã tạo: ' + p.name, 'success');
+  } catch(e) { toast(e.detail || 'Lỗi tạo project', 'error'); }
+}
+
+function showRenameModal() {
+  document.getElementById('renameInput').value = state.current?.name || '';
+  document.getElementById('renameModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('renameInput').focus(), 50);
+}
+
+async function confirmRename() {
+  const name = document.getElementById('renameInput').value.trim();
+  if (!name || !state.current) return;
+  try {
+    const p = await api.patch(`/api/projects/${enc(state.current.safe)}/rename`, { name });
+    closeModal('renameModal');
+    state.current = p;
+    await loadProjects();
+    toast('Đã đổi tên', 'success');
+  } catch(e) { toast(e.detail || 'Lỗi đổi tên', 'error'); }
+}
+
+async function deleteProject() {
+  if (!state.current) return;
+  if (!confirm(`Xoá project "${state.current.name}"?\nThao tác này không thể hoàn tác.`)) return;
+  try {
+    await api.del(`/api/projects/${state.current.safe}`);
+    state.current = null;
+    onProjectChange('');
+    await loadProjects();
+    toast('Đã xoá project', 'success');
+  } catch(e) { toast('Lỗi xoá project', 'error'); }
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  state.activeTab = name;
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['files','settings','render','queue'][i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'render') {
+    loadOutputs(); loadCapacity(); loadNextBatchName();
+    if (state.current) checkRenderStatus();
+  }
+  if (name === 'queue') loadQueue();
+}
+
+// ── Files tab ─────────────────────────────────────────────────────────────────
+function renderFiles() { if (!state.current) return; renderImageList(); renderAssets(); }
+
+function renderImageList() {
+  const p = state.current;
+  const list = document.getElementById('imageList');
+  document.getElementById('imgCount').textContent = (p.images?.length || 0) + ' ảnh';
+  list.innerHTML = '';
+  for (const img of (p.images || [])) {
+    const row = document.createElement('div');
+    row.className = 'img-row';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.style.accentColor = 'var(--primary)';
+    cb.checked = state.selectedImages.has(img.name);
+    cb.onchange = () => { if (cb.checked) state.selectedImages.add(img.name); else state.selectedImages.delete(img.name); };
+    const thumb = document.createElement(img.exists ? 'img' : 'div');
+    if (img.exists) { thumb.className = 'img-thumb'; thumb.src = `/api/projects/${p.safe}/image/${encodeURIComponent(img.name)}`; thumb.loading = 'lazy'; }
+    else { thumb.className = 'img-thumb-placeholder'; thumb.textContent = '?'; }
+    const name = document.createElement('span');
+    name.className = 'img-name' + (img.exists ? '' : ' missing');
+    name.textContent = img.name + (img.exists ? '' : ' (thiếu)');
+    name.title = img.name;
+    const btn = document.createElement('button');
+    btn.className = 'img-remove'; btn.textContent = '×'; btn.title = 'Xoá';
+    btn.onclick = () => removeSingleImage(img.name);
+    row.append(cb, thumb, name, btn);
+    list.appendChild(row);
+  }
+}
+
+function renderAssets() {
+  const p = state.current;
+  const container = document.getElementById('assetRows');
+  container.innerHTML = '';
+  for (const cfg of ASSET_CONFIG) {
+    const row = document.createElement('div');
+    row.className = 'file-row';
+
+    const labelWrap = document.createElement('span');
+    labelWrap.className = 'file-label';
+    labelWrap.style.display = 'flex';
+    labelWrap.style.flexDirection = 'column';
+    labelWrap.style.gap = '2px';
+    const labelText = document.createElement('span');
+    labelText.textContent = cfg.label;
+    const hint = document.createElement('span');
+    hint.style.fontSize = '9px';
+    hint.style.fontWeight = '600';
+    hint.style.letterSpacing = '0.4px';
+    hint.style.textTransform = 'uppercase';
+    if (cfg.required) {
+      hint.style.color = '#f87171';
+      hint.textContent = 'bắt buộc';
+    } else {
+      hint.style.color = 'var(--muted)';
+      hint.textContent = 'optional';
+    }
+    labelWrap.append(labelText, hint);
+
+    const name = document.createElement('span');
+    name.className = 'file-name' + (p[cfg.kind] ? '' : ' file-none');
+    name.id = `asset-${cfg.kind}`;
+    name.textContent = p[cfg.kind] || 'Chưa upload';
+    name.style.flex = '1';
+
+    const uploadBtn = document.createElement('button');
+    uploadBtn.className = 'btn-secondary btn-sm';
+    uploadBtn.textContent = 'Upload';
+    uploadBtn.onclick = () => triggerAssetUpload(cfg.kind, cfg.exts);
+
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'btn-danger btn-sm';
+    clearBtn.textContent = 'Clear';
+    clearBtn.disabled = !p[cfg.kind];
+    clearBtn.onclick = () => clearAsset(cfg.kind);
+
+    row.append(labelWrap, name, uploadBtn, clearBtn);
+    container.appendChild(row);
+  }
+}
+
+function setupDropZone() {
+  const zone = document.getElementById('dropZone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag-over');
+    const files = [...e.dataTransfer.files].filter(f => /\.(png|jpg|jpeg|webp|bmp)$/i.test(f.name));
+    if (files.length) uploadImages(files);
+  });
+}
+
+async function uploadImages(files) {
+  if (!state.current || !files.length) return;
+  try {
+    const res = await api.upload(`/api/projects/${enc(state.current.safe)}/images`, [...files]);
+    toast(`+${res.added.length} ảnh (total: ${res.total})`, 'success');
+    state.current = await api.get(`/api/projects/${state.current.safe}`);
+    renderImageList();
+    document.getElementById('imgCount').textContent = state.current.images.length + ' ảnh';
+    document.getElementById('projectBadge').textContent = `${state.current.image_count} ảnh · ${state.current.rendered_count} rendered`;
+  } catch(e) { toast(e.detail || 'Lỗi upload ảnh', 'error'); }
+}
+
+async function removeSingleImage(name) {
+  if (!state.current) return;
+  try {
+    await api.del(`/api/projects/${enc(state.current.safe)}/images`, { names: [name] });
+    state.current = await api.get(`/api/projects/${state.current.safe}`);
+    state.selectedImages.delete(name); renderImageList();
+    document.getElementById('imgCount').textContent = state.current.images.length + ' ảnh';
+  } catch(e) { toast('Lỗi xoá ảnh', 'error'); }
+}
+
+async function removeSelectedImages() {
+  if (!state.current || !state.selectedImages.size) return toast('Chưa chọn ảnh nào');
+  try {
+    await api.del(`/api/projects/${enc(state.current.safe)}/images`, { names: [...state.selectedImages] });
+    state.selectedImages.clear();
+    state.current = await api.get(`/api/projects/${state.current.safe}`);
+    renderImageList();
+    document.getElementById('imgCount').textContent = state.current.images.length + ' ảnh';
+    toast('Đã xoá', 'success');
+  } catch(e) { toast('Lỗi xoá', 'error'); }
+}
+
+async function clearAllImages() {
+  if (!state.current) return;
+  if (!confirm('Xoá tất cả ảnh?')) return;
+  try {
+    await api.del(`/api/projects/${enc(state.current.safe)}/images`, { names: state.current.images.map(i => i.name) });
+    state.selectedImages.clear();
+    state.current = await api.get(`/api/projects/${state.current.safe}`);
+    renderImageList();
+    document.getElementById('imgCount').textContent = '0 ảnh';
+    toast('Đã xoá hết', 'success');
+  } catch(e) { toast('Lỗi', 'error'); }
+}
+
+let _pendingAssetKind = null;
+function triggerAssetUpload(kind, exts) {
+  _pendingAssetKind = kind;
+  const input = document.getElementById('assetInput');
+  input.accept = exts;
+  input.onchange = async () => {
+    if (!input.files.length || !state.current) return;
+    try {
+      await api.uploadSingle(`/api/projects/${enc(state.current.safe)}/asset/${_pendingAssetKind}`, input.files[0]);
+      state.current = await api.get(`/api/projects/${state.current.safe}`);
+      renderAssets(); toast('Upload thành công', 'success');
+    } catch(e) { toast(e.detail || 'Lỗi upload', 'error'); }
+    input.value = '';
+  };
+  input.click();
+}
+
+async function clearAsset(kind) {
+  if (!state.current) return;
+  try {
+    await api.del(`/api/projects/${enc(state.current.safe)}/asset/${kind}`);
+    state.current = await api.get(`/api/projects/${state.current.safe}`);
+    renderAssets(); toast('Đã xoá', 'success');
+  } catch(e) { toast('Lỗi', 'error'); }
+}
+
+// ── Settings tab ──────────────────────────────────────────────────────────────
+function renderSettings() {
+  if (!state.current) return;
+  const grid = document.getElementById('settingsGrid');
+  grid.innerHTML = '';
+  const cfg = state.current.config || {};
+  for (const item of SETTINGS_SPEC) {
+    if (item.section !== undefined) {
+      const div = document.createElement('div');
+      div.className = 'settings-section'; div.textContent = item.section;
+      grid.appendChild(div); continue;
+    }
+    const val = cfg[item.key] ?? '';
+    const label = document.createElement('span');
+    label.className = 'settings-label'; label.textContent = item.label;
+    let input;
+    if (item.type === 'bool') {
+      input = document.createElement('input'); input.type = 'checkbox';
+      input.id = 'cfg_' + item.key; input.checked = !!val; input.style.width = 'auto';
+    } else if (item.type.startsWith('choice:')) {
+      const choices = item.type.split(':')[1].split(',');
+      input = document.createElement('select'); input.id = 'cfg_' + item.key;
+      for (const c of choices) {
+        const opt = document.createElement('option');
+        opt.value = c; opt.textContent = c; if (c === val) opt.selected = true;
+        input.appendChild(opt);
+      }
+    } else {
+      input = document.createElement('input'); input.type = 'text';
+      input.id = 'cfg_' + item.key; input.value = val === null ? '' : String(val);
+    }
+    const desc = document.createElement('span');
+    desc.className = 'settings-desc'; desc.textContent = item.desc;
+    grid.append(label, input, desc);
+  }
+}
+
+function collectSettings() {
+  const cfg = {};
+  for (const item of SETTINGS_SPEC) {
+    if (item.section !== undefined) continue;
+    const el = document.getElementById('cfg_' + item.key); if (!el) continue;
+    if (item.type === 'bool') { cfg[item.key] = el.checked; continue; }
+    const raw = el.value.trim();
+    if (item.type === 'int') cfg[item.key] = parseInt(raw) || 0;
+    else if (item.type === 'float') cfg[item.key] = parseFloat(raw) || 0;
+    else if (item.type === 'int_or_none') cfg[item.key] = raw === '' ? null : (parseInt(raw) || null);
+    else cfg[item.key] = raw;
+  }
+  return cfg;
+}
+
+async function saveSettings() {
+  if (!state.current) return;
+  try {
+    await api.put(`/api/projects/${enc(state.current.safe)}/config`, collectSettings());
+    state.current = await api.get(`/api/projects/${state.current.safe}`);
+    toast('Đã lưu settings', 'success');
+  } catch(e) { toast(e.detail || 'Lỗi lưu', 'error'); }
+}
+
+const FACTORY_DEFAULTS = {
+  TOTAL_VIDEOS:10, IMAGES_PER_VIDEO:3, IMAGE_DURATION:1.5, FADE_DURATION:0.15,
+  WIDTH:1080, HEIGHT:1920, FPS:30, IMAGE_SCALE_MODE:'fit_blur_bg',
+  IMAGE_SCALE_PERCENT:120, FIT_BACKGROUND_COLOR:'black',
+  BLUR_BACKGROUND_STRENGTH:8, BLUR_BACKGROUND_BRIGHTNESS:-0.08,
+  BLUR_BACKGROUND_SATURATION:1.1, MUSIC_START_SECONDS:71,
+  VOICE_START_SECONDS:0, MUSIC_VOLUME:0.4, VOICE_VOLUME:1.5,
+  MAX_SAME_IMAGE_PER_POSITION_PER_BATCH:3, RANDOM_SEED:null,
+  AUTO_CLEAN_TEMP:true, USE_HW_ENCODER:true, FFMPEG_THREADS:0,
+};
+
+function saveAsDefault() {
+  if (!state.current) return;
+  const cfg = collectSettings();
+  localStorage.setItem('vidauto_default_settings', JSON.stringify(cfg));
+  toast('Đã lưu làm mặc định!', 'success');
+}
+
+async function resetSettings() {
+  if (!state.current) return;
+  const saved = localStorage.getItem('vidauto_default_settings');
+  const defaults = saved ? JSON.parse(saved) : FACTORY_DEFAULTS;
+  state.current.config = {...FACTORY_DEFAULTS, ...defaults};
+  renderSettings();
+  toast('Reset xong — nhấn Lưu để áp dụng');
+}
+
+// ── Render tab ────────────────────────────────────────────────────────────────
+async function startRender() {
+  if (!state.current) return;
+  // Auto-save settings trước khi render để đảm bảo config mới nhất
+  try {
+    await api.put(`/api/projects/${enc(state.current.safe)}/config`, collectSettings());
+    state.current = await api.get(`/api/projects/${state.current.safe}`);
+  } catch(e) { toast('Lỗi lưu settings: ' + (e.detail || e), 'error'); return; }
+
+  const batchName = document.getElementById('inputBatchName').value.trim();
+  const outputDir = document.getElementById('inputOutputDir').value.trim();
+  const payload = {};
+  if (batchName) payload.batch_name = batchName;
+  if (outputDir) payload.output_dir = outputDir;
+  try {
+    await api.post(`/api/projects/${enc(state.current.safe)}/render/start`, payload);
+    document.getElementById('btnStart').disabled = true;
+    document.getElementById('btnStop').disabled = false;
+    document.getElementById('logBox').innerHTML = '';
+    document.getElementById('progressBar').classList.add('running');
+    setProgress(0, 0, 'Đang khởi động...');
+    connectSSE();
+    toast('Render bắt đầu!', 'success');
+  } catch(e) { toast(e.detail || 'Không thể bắt đầu render', 'error'); }
+}
+
+async function stopRender() {
+  if (!state.current) return;
+  try {
+    await api.post(`/api/projects/${enc(state.current.safe)}/render/stop`, {});
+    // Re-enable start ngay sau khi stop — không chờ SSE
+    setTimeout(() => {
+      const btn = document.getElementById('btnStart');
+      if (btn && btn.disabled) {
+        btn.disabled = !_workerOnline;
+        document.getElementById('btnStop').disabled = true;
+        document.getElementById('progressBar').classList.remove('running');
+        setProgress(0, 0, '■ Đã dừng');
+      }
+    }, 1500);
+  } catch(e) {}
+}
+
+function connectSSE() {
+  if (state.es) { state.es.close(); state.es = null; }
+  if (!state.current) return;
+  const es = new EventSource(`/api/projects/${enc(state.current.safe)}/render/stream`);
+  state.es = es;
+  es.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'log') appendLog(msg.msg);
+    else if (msg.type === 'progress') setProgress(msg.done, msg.total, msg.label);
+    else if (msg.type === 'done') {
+      es.close(); state.es = null;
+      document.getElementById('btnStart').disabled = false;
+      document.getElementById('btnStop').disabled = true;
+      document.getElementById('progressBar').classList.remove('running');
+      const ok = msg.status === 'done';
+      setProgress(ok ? 1 : 0, 1, ok ? '✓ Hoàn tất!' : '✗ ' + msg.status);
+      if (ok) {
+        loadOutputs(); loadCapacity(); loadNextBatchName();
+        if (state.activeTab === 'queue') loadQueue(); else loadQueue();
+        // Refresh project để cập nhật rendered count
+        loadProjects().then(() => {
+          if (state.current) {
+            const p = state.projects.find(x => x.safe === state.current.safe);
+            if (p) {
+              state.current.rendered_count = p.rendered_count;
+              document.getElementById('projectBadge').textContent = `${p.image_count} ảnh · ${p.rendered_count} rendered`;
+              document.getElementById('renderedCount').textContent = p.rendered_count;
+            }
+          }
+        });
+      }
+    }
+  };
+  es.onerror = () => { es.close(); state.es = null; };
+}
+
+function appendLog(msg) {
+  const box = document.getElementById('logBox');
+  const line = document.createElement('div');
+  if (msg.startsWith('LỖI') || msg.includes('failed') || msg.includes('Error')) line.className = 'log-err';
+  else if (msg.startsWith('✓')) line.className = 'log-ok';
+  else if (msg.startsWith('$')) line.className = 'log-cmd';
+  else if (msg.startsWith('===')) line.className = 'log-info';
+  line.textContent = msg;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+function setProgress(done, total, label) {
+  const pct = total > 0 ? (done / total * 100).toFixed(1) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = label || (total > 0 ? `${done}/${total}` : 'Sẵn sàng.');
+}
+
+async function checkRenderStatus() {
+  if (!state.current) return;
+  try {
+    const s = await api.get(`/api/projects/${enc(state.current.safe)}/render/status`);
+    if (s.status === 'running') {
+      document.getElementById('btnStart').disabled = true;
+      document.getElementById('btnStop').disabled = false;
+      document.getElementById('progressBar').classList.add('running');
+      setProgress(s.progress.done, s.progress.total, s.progress.label || 'Đang render...');
+      if (!state.es) connectSSE();
+    } else if (s.status === 'done') {
+      document.getElementById('btnStart').disabled = false;
+      document.getElementById('btnStop').disabled = true;
+      document.getElementById('progressBar').classList.remove('running');
+      setProgress(1, 1, '✓ Hoàn tất!');
+    } else {
+      // error / stopped / cancelled / cancelling / idle
+      document.getElementById('btnStart').disabled = !_workerOnline;
+      document.getElementById('btnStop').disabled = true;
+      document.getElementById('progressBar').classList.remove('running');
+      const labels = { error:'✗ Lỗi', stopped:'■ Đã dừng', cancelled:'■ Đã huỷ', cancelling:'⏹ Đang dừng...' };
+      setProgress(0, 0, labels[s.status] || 'Sẵn sàng.');
+    }
+  } catch(e) {}
+}
+
+async function openOutputFolder() {
+  if (!state.current) return;
+  try { await api.post(`/api/projects/${enc(state.current.safe)}/open-folder`, {}); }
+  catch(e) { toast('Không mở được folder', 'error'); }
+}
+
+// ── Job Queue ─────────────────────────────────────────────────────────────────
+async function loadQueue() {
+  if (!state.current) return;
+  try {
+    const jobs = await api.get(`/api/jobs?project=${enc(state.current.safe)}&limit=30`);
+    renderQueue(jobs);
+    // Cập nhật badge số job đang active
+    const active = jobs.filter(j => ['pending','running','cancelling'].includes(j.status)).length;
+    const badge = document.getElementById('queueBadge');
+    badge.textContent = active;
+    badge.style.display = active > 0 ? '' : 'none';
+  } catch(e) {}
+}
+
+function renderQueue(jobs) {
+  const el = document.getElementById('queueList');
+  if (!jobs.length) { el.innerHTML = '<span style="color:var(--muted);font-size:11px">Chưa có job nào.</span>'; return; }
+  el.innerHTML = jobs.map(j => {
+    const date = j.created_at ? j.created_at.replace('T', ' ').slice(0, 16) : '';
+    const prog = j.progress_total > 0 ? ` · ${j.progress_done}/${j.progress_total}` : '';
+    const active = ['pending','running','cancelling'].includes(j.status);
+    const canCancel = ['pending','running'].includes(j.status);
+    return `<div class="job-row">
+      <div class="job-info">
+        <div class="job-name" title="${esc(j.batch_name)}">${esc(j.batch_name) || j.id}</div>
+        <div class="job-meta">${date}${prog}${j.progress_label ? ' · ' + esc(j.progress_label) : ''}</div>
+      </div>
+      <span class="job-status ${j.status}">${j.status}</span>
+      ${canCancel ? `<button class="btn-danger btn-sm" onclick="cancelJob('${j.id}')">✕ Cancel</button>` : ''}
+      ${!active ? `<button class="btn-secondary btn-sm" onclick="redoJob('${j.id}')">↺ Redo</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function cancelJob(id) {
+  try {
+    await api.post(`/api/jobs/${id}/cancel`, {});
+    toast('Đã cancel job', 'success');
+    loadQueue();
+    checkRenderStatus();
+    setTimeout(() => {
+      document.getElementById('btnStart').disabled = !_workerOnline;
+      document.getElementById('btnStop').disabled = true;
+      setProgress(0, 0, '■ Đã huỷ');
+    }, 500);
+  } catch(e) { toast(e.detail || 'Lỗi', 'error'); }
+}
+
+async function redoJob(id) {
+  try {
+    const r = await api.post(`/api/jobs/${id}/redo`, {});
+    toast('Đã thêm lại vào queue!', 'success');
+    loadQueue();
+    // Chuyển sang tab render
+    switchTab('render');
+    connectSSE();
+    document.getElementById('btnStart').disabled = true;
+    document.getElementById('btnStop').disabled = false;
+    document.getElementById('progressBar').classList.add('running');
+    setProgress(0, 0, 'Đang chờ worker...');
+  } catch(e) { toast(e.detail || 'Lỗi', 'error'); }
+}
+
+async function loadOutputs() {
+  if (!state.current) return;
+  const customDir = document.getElementById('inputOutputDir')?.value.trim();
+  const url = customDir
+    ? `/api/projects/${enc(state.current.safe)}/outputs?custom_dir=${encodeURIComponent(customDir)}`
+    : `/api/projects/${enc(state.current.safe)}/outputs`;
+  try {
+    const batches = await api.get(url);
+    const el = document.getElementById('outputsList');
+    if (!batches.length) { el.innerHTML = '<span style="color:var(--muted);font-size:11px">Chưa có video nào.</span>'; return; }
+    el.innerHTML = '';
+    for (const b of batches) {
+      const div = document.createElement('div');
+      div.className = 'output-batch';
+      const dirNote = b.dir ? `<span style="color:var(--muted);font-size:10px;margin-left:8px;font-family:var(--mono)">${b.dir}</span>` : '';
+      div.innerHTML = `<div class="batch-title">📁 ${esc(b.batch)}${dirNote}</div>`;
+      const vlist = document.createElement('div');
+      vlist.className = 'video-list';
+      for (const v of b.videos) {
+        const item = document.createElement('div');
+        item.className = 'video-item';
+        const dlUrl = `/api/projects/${enc(state.current.safe)}/output/${encodeURIComponent(b.batch)}/${encodeURIComponent(v)}`;
+        item.innerHTML = `🎬 <a href="${dlUrl}" download="${v}">${esc(v)}</a>`;
+        vlist.appendChild(item);
+      }
+      div.appendChild(vlist);
+      el.appendChild(div);
+    }
+  } catch(e) {}
+}
+
+async function loadCapacity() {
+  const el = document.getElementById('capacityInfo');
+  if (!el || !state.current) return;
+  el.textContent = '...';
+  try {
+    const c = await api.get(`/api/projects/${enc(state.current.safe)}/capacity`);
+    const pct = c.total_ordered > 0 ? Math.round(c.history_used / c.total_ordered * 100) : 0;
+    el.innerHTML =
+      `<span style="color:var(--text);font-weight:600">${c.effective_max}</span> combo còn lại` +
+      ` · đã render <span style="color:var(--primary)">${c.history_used}</span>/${c.total_ordered} (${pct}%)`;
+  } catch(e) { el.textContent = '—'; }
+}
+
+async function browseOutputDir() {
+  const btn = document.getElementById('btnBrowse');
+  btn.disabled = true; btn.textContent = '⏳';
+  try {
+    const r = await api.get('/api/browse-folder');
+    if (r.path) { document.getElementById('inputOutputDir').value = r.path; saveOutputDir(r.path); toast('Đã chọn thư mục', 'success'); }
+  } catch(e) {
+    if (e.detail !== 'Cancelled') toast('Không mở được dialog', 'error');
+  } finally { btn.disabled = false; btn.textContent = '📂 Browse'; }
+}
+
+async function loadNextBatchName() {
+  if (!state.current) return;
+  const el = document.getElementById('inputBatchName');
+  if (!el) return;
+  try {
+    const r = await api.get(`/api/projects/${enc(state.current.safe)}/next-batch-name`);
+    el.placeholder = `${r.name}  (để trống → tự tạo)`;
+  } catch(e) { el.placeholder = 'để trống → tự tạo'; }
+}
+
+// ── Templates ─────────────────────────────────────────────────────────────────
+let _templates = [];
+let _renamingTemplateId = null;
+
+async function loadTemplates() {
+  try {
+    _templates = await api.get('/api/templates');
+    renderTemplates();
+  } catch(e) { console.error('loadTemplates', e); }
+}
+
+function renderTemplates() {
+  const el = document.getElementById('templateList');
+  if (!_templates.length) {
+    el.innerHTML = '<div class="tmpl-empty">Chưa có template</div>';
+    return;
+  }
+  el.innerHTML = '';
+  for (const t of _templates) {
+    const div = document.createElement('div');
+    div.className = 'tmpl-item';
+    const meta = [t.music ? `♫ ${esc(t.music)}` : '', t.voice ? `🎤 ${esc(t.voice)}` : '']
+      .filter(Boolean).join('  ·  ') || '<span style="color:var(--muted)">Chỉ settings</span>';
+    div.innerHTML = `
+      <div class="tmpl-name">${esc(t.name)}</div>
+      <div class="tmpl-meta">${meta}</div>
+      <div class="tmpl-actions">
+        <button class="btn-primary btn-sm" onclick="applyTemplate('${t.id}')" title="Áp vào project hiện tại">Apply</button>
+        <button class="btn-secondary btn-sm" onclick="showRenameTemplateModal('${t.id}','${esc(t.name)}')" title="Đổi tên">✎</button>
+        <button class="btn-secondary btn-sm" onclick="dupTemplate('${t.id}')" title="Duplicate">⊕</button>
+        <button class="btn-danger btn-sm" onclick="deleteTemplate('${t.id}')" title="Xoá">×</button>
+      </div>`;
+    el.appendChild(div);
+  }
+}
+
+function showSaveTemplateModal() {
+  if (!state.current) { toast('Chọn project trước', 'error'); return; }
+  document.getElementById('templateNameInput').value = state.current.name;
+  document.getElementById('saveTemplateModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('templateNameInput').focus(), 50);
+}
+
+async function confirmSaveTemplate() {
+  const name = document.getElementById('templateNameInput').value.trim();
+  if (!name || !state.current) return;
+  try {
+    const t = await api.post('/api/templates', { name, from_project: state.current.safe });
+    closeModal('saveTemplateModal');
+    _templates.unshift(t);
+    renderTemplates();
+    toast(`Đã lưu template "${t.name}"`, 'success');
+  } catch(e) { toast(e.detail || 'Lỗi lưu template', 'error'); }
+}
+
+async function applyTemplate(tid) {
+  if (!state.current) { toast('Chọn project trước', 'error'); return; }
+  const t = _templates.find(x => x.id === tid);
+  if (!t) return;
+  if (!confirm(`Áp template "${t.name}" vào project "${state.current.name}"?\nSettings, music, voice sẽ được cập nhật — ảnh giữ nguyên.`)) return;
+  try {
+    const updated = await api.post(`/api/projects/${enc(state.current.safe)}/apply-template/${tid}`, {});
+    state.current = updated;
+    renderFiles();
+    renderSettings();
+    toast(`Đã áp template "${t.name}"`, 'success');
+  } catch(e) { toast(e.detail || 'Lỗi apply template', 'error'); }
+}
+
+function showRenameTemplateModal(tid, currentName) {
+  _renamingTemplateId = tid;
+  document.getElementById('renameTemplateInput').value = currentName;
+  document.getElementById('renameTemplateModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('renameTemplateInput').focus(), 50);
+}
+
+async function confirmRenameTemplate() {
+  const name = document.getElementById('renameTemplateInput').value.trim();
+  if (!name || !_renamingTemplateId) return;
+  try {
+    const updated = await api.patch(`/api/templates/${_renamingTemplateId}/rename`, { name });
+    closeModal('renameTemplateModal');
+    const idx = _templates.findIndex(t => t.id === _renamingTemplateId);
+    if (idx >= 0) _templates[idx] = updated;
+    renderTemplates();
+    toast('Đã đổi tên template', 'success');
+    _renamingTemplateId = null;
+  } catch(e) { toast(e.detail || 'Lỗi đổi tên', 'error'); }
+}
+
+async function dupTemplate(tid) {
+  try {
+    const newT = await api.post(`/api/templates/${tid}/duplicate`, {});
+    _templates.push(newT);
+    renderTemplates();
+    toast(`Đã duplicate → "${newT.name}"`, 'success');
+  } catch(e) { toast(e.detail || 'Lỗi duplicate template', 'error'); }
+}
+
+async function deleteTemplate(tid) {
+  const t = _templates.find(x => x.id === tid);
+  if (!t || !confirm(`Xoá template "${t.name}"?`)) return;
+  try {
+    await api.del(`/api/templates/${tid}`);
+    _templates = _templates.filter(x => x.id !== tid);
+    renderTemplates();
+    toast('Đã xoá template', 'success');
+  } catch(e) { toast(e.detail || 'Lỗi xoá template', 'error'); }
+}
+
+// ── Worker status ─────────────────────────────────────────────────────────────
+let _workerOnline = false;
+
+async function pollWorkerStatus() {
+  try {
+    const s = await api.get('/api/worker/status');
+    _workerOnline = s.online;
+  } catch(e) {
+    _workerOnline = false;
+  }
+  const pill = document.getElementById('workerPill');
+  const label = document.getElementById('workerLabel');
+  const banner = document.getElementById('offlineBanner');
+  const btnStart = document.getElementById('btnStart');
+
+  if (_workerOnline) {
+    pill.className = 'worker-pill online';
+    label.textContent = 'Worker Online';
+  } else {
+    pill.className = 'worker-pill offline';
+    label.textContent = 'Worker Offline';
+  }
+  if (banner) banner.style.display = _workerOnline ? 'none' : '';
+  if (btnStart) {
+    const status = document.getElementById('progressLabel')?.textContent || '';
+    const isRendering = status.includes('Đang') || status.includes('...');
+    if (!isRendering) btnStart.disabled = !_workerOnline;
+  }
+}
+
+setInterval(pollWorkerStatus, 15000);
+
+// ── Duplicate project ─────────────────────────────────────────────────────────
+async function duplicateProject() {
+  if (!state.current) return;
+  try {
+    const newP = await api.post(`/api/projects/${enc(state.current.safe)}/duplicate`, {});
+    toast(`Đã duplicate → "${newP.name}"`, 'success');
+    await loadProjects();
+    await selectProject(newP.safe);
+  } catch(e) { toast(e.detail || 'Lỗi duplicate project', 'error'); }
+}
+
+// ── Utils ─────────────────────────────────────────────────────────────────────
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── Save output dir per-project ───────────────────────────────────────────────
+function saveOutputDir(val) {
+  if (state.current) localStorage.setItem(`vidauto_output_dir_${state.current.safe}`, val);
+}
+
+// ── Replace Audio View ────────────────────────────────────────────────────────
+let _raUploadedPaths = { music: '', voice: '' };
+let _raAbortController = null;
+
+function toggleReplaceAudioView() {
+  const ra   = document.getElementById('replaceAudioView');
+  const main = document.getElementById('mainContent');
+  const btn  = document.getElementById('btnReplaceAudio');
+  const showing = ra.style.display !== 'none';
+  if (showing) {
+    ra.style.display   = 'none';
+    main.style.display = 'flex';
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-secondary');
+  } else {
+    ra.style.display   = 'flex';
+    main.style.display = 'none';
+    btn.classList.remove('btn-secondary');
+    btn.classList.add('btn-primary');
+    loadReplaceAudioBatches();
+    populateRaProjectSelect();
+  }
+}
+
+async function loadReplaceAudioBatches() {
+  try {
+    const batches = await api.get('/api/all-batches');
+    const sel = document.getElementById('raBatchSelect');
+    sel.innerHTML = '<option value="">— chọn batch —</option>';
+    for (const b of batches) {
+      const opt = document.createElement('option');
+      opt.value = b.path;
+      opt.textContent = `${b.batch}  (${b.count} videos)  ·  ${b.path}`;
+      sel.appendChild(opt);
+    }
+    if (!batches.length) sel.innerHTML = '<option value="">Chưa có batch nào</option>';
+  } catch(e) { console.error('loadReplaceAudioBatches', e); }
+}
+
+function onRaBatchChange(path) {
+  if (path) document.getElementById('raInputDir').value = path;
+}
+
+function populateRaProjectSelect() {
+  const sel = document.getElementById('raProjectSelect');
+  sel.innerHTML = '<option value="">— chọn project —</option>';
+  for (const p of state.projects) {
+    const opt = document.createElement('option');
+    opt.value = p.safe;
+    const hasAudio = p.music && p.voice;
+    opt.textContent = p.name + (hasAudio ? '' : '  ⚠ thiếu audio');
+    sel.appendChild(opt);
+  }
+  if (state.current) sel.value = state.current.safe;
+}
+
+function onRaAudioSourceChange(val) {
+  document.getElementById('raProjectSection').style.display = val === 'project' ? 'grid' : 'none';
+  document.getElementById('raUploadSection').style.display  = val === 'upload'  ? 'grid' : 'none';
+}
+
+async function browseRaDir(targetId) {
+  const btn = event.currentTarget;
+  btn.disabled = true;
+  try {
+    const r = await api.get('/api/browse-folder');
+    if (r.path) {
+      document.getElementById(targetId).value = r.path;
+      // Nếu là input dir → xoá batch selector (user đã chọn manual)
+      if (targetId === 'raInputDir') document.getElementById('raBatchSelect').value = '';
+    }
+  } catch(e) {
+    if (e.detail !== 'Cancelled') toast('Không mở được dialog', 'error');
+  } finally { btn.disabled = false; }
+}
+
+async function uploadRaAudio(kind) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.mp3,.wav,.m4a,.aac';
+  input.onchange = async () => {
+    if (!input.files.length) return;
+    try {
+      const fd = new FormData();
+      fd.append('file', input.files[0]);
+      const r = await fetch(`/api/replace-audio/upload/${kind}`, { method: 'POST', body: fd });
+      if (!r.ok) throw await r.json();
+      const data = await r.json();
+      _raUploadedPaths[kind] = data.path;
+      const span = document.getElementById(kind === 'music' ? 'raMusicName' : 'raVoiceName');
+      span.textContent = data.name;
+      span.style.color = 'var(--success)';
+      toast(`Uploaded ${kind}`, 'success');
+    } catch(e) { toast(e.detail || 'Lỗi upload', 'error'); }
+  };
+  input.click();
+}
+
+async function runReplaceAudio() {
+  const inputDir   = document.getElementById('raInputDir').value.trim();
+  const outputDir  = document.getElementById('raOutputDir').value.trim();
+  const audioSrc   = document.getElementById('raAudioSource').value;
+  const musicStart = parseFloat(document.getElementById('raMusicStart').value) || 72;
+  const musicVol   = parseFloat(document.getElementById('raMusicVol').value)   || 0.6;
+  const voiceVol   = parseFloat(document.getElementById('raVoiceVol').value)   || 4.5;
+  const limitRaw   = document.getElementById('raLimit').value.trim();
+  const limit      = limitRaw ? parseInt(limitRaw) : null;
+
+  if (!inputDir) { toast('Chưa chọn thư mục input', 'error'); return; }
+
+  const payload = {
+    input_dir: inputDir, output_dir: outputDir, audio_source: audioSrc,
+    music_start: musicStart, music_volume: musicVol, voice_volume: voiceVol,
+  };
+  if (limit) payload.limit = limit;
+
+  if (audioSrc === 'project') {
+    const safe = document.getElementById('raProjectSelect').value;
+    if (!safe) { toast('Chọn project để lấy audio', 'error'); return; }
+    payload.project_safe = safe;
+  } else {
+    if (!_raUploadedPaths.music) { toast('Chưa upload music', 'error'); return; }
+    if (!_raUploadedPaths.voice) { toast('Chưa upload voice', 'error'); return; }
+    payload.music_path = _raUploadedPaths.music;
+    payload.voice_path = _raUploadedPaths.voice;
+  }
+
+  document.getElementById('raBtnRun').disabled  = true;
+  document.getElementById('raBtnStop').disabled = false;
+  document.getElementById('raLogBox').innerHTML = '';
+  document.getElementById('raProgressBar').classList.add('running');
+  document.getElementById('raProgressLabel').textContent = 'Đang chạy...';
+
+  _raAbortController = new AbortController();
+
+  try {
+    const response = await fetch('/api/replace-audio/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: _raAbortController.signal,
+    });
+    if (!response.ok) { const err = await response.json(); throw err; }
+
+    const reader  = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const msg = JSON.parse(line.slice(6));
+          if (msg.type === 'log')      appendRaLog(msg.msg);
+          else if (msg.type === 'progress') setRaProgress(msg.done, msg.total, msg.label);
+          else if (msg.type === 'done') {
+            toast(`✓ ${msg.ok} videos · ${msg.output_dir}`, 'success');
+          }
+        } catch(_) {}
+      }
+    }
+  } catch(e) {
+    if (e.name === 'AbortError') appendRaLog('■ Đã dừng');
+    else toast(e.detail || String(e), 'error');
+  } finally {
+    document.getElementById('raBtnRun').disabled  = false;
+    document.getElementById('raBtnStop').disabled = true;
+    document.getElementById('raProgressBar').classList.remove('running');
+    _raAbortController = null;
+  }
+}
+
+function stopReplaceAudio() {
+  if (_raAbortController) _raAbortController.abort();
+  api.post('/api/replace-audio/stop', {}).catch(() => {});
+  appendRaLog('⏹ Đang dừng...');
+}
+
+function appendRaLog(msg) {
+  const box  = document.getElementById('raLogBox');
+  const line = document.createElement('div');
+  if (msg.startsWith('✗') || msg.includes('Lỗi') || msg.toLowerCase().includes('error'))
+    line.className = 'log-err';
+  else if (msg.startsWith('✓') || msg.startsWith('=== DONE'))
+    line.className = 'log-ok';
+  else if (msg.startsWith('==='))
+    line.className = 'log-info';
+  line.textContent = msg;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+function setRaProgress(done, total, label) {
+  const pct = total > 0 ? (done / total * 100).toFixed(1) : 0;
+  document.getElementById('raProgressBar').style.width = pct + '%';
+  document.getElementById('raProgressLabel').textContent = label || (total > 0 ? `${done}/${total}` : 'Sẵn sàng.');
+}
+</script>
+</body>
+</html>

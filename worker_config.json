@@ -1,0 +1,6 @@
+{
+  "server_url": "http://localhost:7861",
+  "output_dir": "C:/Users/Admin/Videos/VidAuto",
+  "poll_interval": 5,
+  "heartbeat_interval": 30
+}
