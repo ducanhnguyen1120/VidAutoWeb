@@ -72,13 +72,30 @@ def _get_project(safe: str) -> Project:
         raise HTTPException(500, str(e))
 
 
+def _count_rendered(p: Project) -> int:
+    dirs_to_scan: set[Path] = set()
+    if p.output_dir.exists():
+        dirs_to_scan.add(p.output_dir)
+    for job in list_jobs(project_safe=p.safe, limit=500):
+        od = job.get("output_dir", "")
+        if od:
+            dirs_to_scan.add(Path(od))
+    total = 0
+    for d in dirs_to_scan:
+        try:
+            total += sum(1 for _ in d.rglob("*.mp4"))
+        except Exception:
+            pass
+    return total
+
+
 def _project_dict(p: Project) -> dict:
     job = latest_for_project(p.safe)
     return {
         "name": p.name,
         "safe": p.safe,
-        "rendered_count": p.rendered_count(),
-        "image_count": len(p.image_paths),
+        "rendered_count": _count_rendered(p),
+        "image_count": sum(1 for ip in p.image_paths if Path(ip).exists()),
         "updated_at": p.updated_at,
         "config": {**DEFAULT_CONFIG, **p.config},
         "fixed_video": p.fixed_video.name if p.fixed_video else None,
@@ -432,7 +449,7 @@ def _auto_batch_name(project_name: str, output_dir: Path) -> str:
         len([d for d in output_dir.iterdir() if d.is_dir() and not d.name.startswith("_")])
         if output_dir.exists() else 0
     )
-    timestamp = datetime.now().strftime("%y%m%d_%H:%M:%S")
+    timestamp = datetime.now().strftime("%y%m%d_%H%M%S")
     return f"{safe}_{existing + 1:02d}_{timestamp}"
 
 

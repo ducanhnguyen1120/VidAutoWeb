@@ -86,9 +86,13 @@ class VideoEngine:
         self.voice_file = Path(voice_file) if voice_file else None
         self.overlay_video = Path(overlay_video) if overlay_video else None
         self.output_root = Path(output_dir)
-        prefix = "".join(c if c.isalnum() or c in "-_" else "_"
-                         for c in (batch_name_prefix or "batch")).strip("_") or "batch"
-        self.batch_id = f"{prefix}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        ts = datetime.now().strftime('%y%m%d_%H%M%S')
+        if batch_name_prefix:
+            prefix = "".join(c if c.isalnum() or c in "-_" else "_"
+                             for c in batch_name_prefix).strip("_")
+            self.batch_id = prefix or ts
+        else:
+            self.batch_id = ts
         self.file_prefix = "".join(c if c.isalnum() or c in "-_" else "_"
                                    for c in (project_name or "video")).strip("_") or "video"
         self.batch_dir = self.output_root / self.batch_id
@@ -162,7 +166,7 @@ class VideoEngine:
             r = subprocess.run(
                 [self.ffprobe, "-v", "error", "-select_streams", "v:0",
                  "-show_entries", "stream=width,height", "-of", "csv=p=0", str(img)],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8", errors="replace"
             )
             parts = r.stdout.strip().split(",")
             self._dims_cache[key] = (int(parts[0]), int(parts[1])) if len(parts) == 2 else (0, 0)
@@ -224,7 +228,7 @@ class VideoEngine:
             pass
         proc = subprocess.run(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            text=True, startupinfo=startupinfo
+            text=True, encoding="utf-8", errors="replace", startupinfo=startupinfo
         )
         if proc.returncode != 0:
             self._log(proc.stdout or "")
@@ -247,7 +251,7 @@ class VideoEngine:
             pass
         result = subprocess.run(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-            text=True, check=True, startupinfo=startupinfo
+            text=True, encoding="utf-8", errors="replace", check=True, startupinfo=startupinfo
         )
         return float(result.stdout.strip())
 
@@ -305,7 +309,7 @@ class VideoEngine:
                 "Batch_ID": batch_id,
                 "Video_ID": video_id,
                 "Images": ";".join(p.name for p in combo),
-                "Rendered_At": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "Rendered_At": datetime.now().strftime("%y%m%d_%H%M%S"),
             })
 
     def _generate_combos(self, total, historical):

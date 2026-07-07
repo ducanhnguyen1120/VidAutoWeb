@@ -150,19 +150,17 @@ class Project:
         return dst
 
     def rendered_count(self) -> int:
-        if not self.history_csv.exists():
+        if not self.output_dir.exists():
             return 0
         try:
-            with open(self.history_csv, encoding="utf-8-sig") as f:
-                n = sum(1 for _ in f) - 1
-                return max(0, n)
+            return sum(1 for f in self.output_dir.rglob("*.mp4"))
         except Exception:
             return 0
 
     def delete(self, keep_output: bool = False):
         """Xoá folder project. keep_output=True → giữ output ra ngoài."""
         if keep_output and self.output_dir.exists():
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            ts = datetime.now().strftime("%y%m%d_%H%M%S")
             external = PROJECTS_DIR / f"_kept_{self.safe}_{ts}"
             shutil.move(str(self.output_dir), str(external))
         shutil.rmtree(self.dir, ignore_errors=True)
