@@ -397,7 +397,18 @@ class VideoEngine:
             str(out_path)
         ])
 
+    def _has_video_stream(self, src) -> bool:
+        proc = subprocess.run(
+            [self.ffprobe, "-v", "error", "-select_streams", "v:0",
+             "-show_entries", "stream=codec_type", "-of", "csv=p=0", str(src)],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+        )
+        return "video" in proc.stdout
+
     def _normalize_fixed_video(self, src, out_path):
+        if not self._has_video_stream(src):
+            self._log(f"⚠️  fixed_video '{Path(src).name}' không có video stream — bỏ qua.")
+            return
         W, H, FPS = self.cfg["WIDTH"], self.cfg["HEIGHT"], self.cfg["FPS"]
         vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,"
               f"crop={W}:{H},fps={FPS},format=yuv420p")

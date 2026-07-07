@@ -857,7 +857,7 @@ input[type="file"] { display: none; }
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Mở folder
             </button>
           </div>
-          <div class="capacity-line">Capacity: <span id="capacityInfo">—</span> &nbsp;·&nbsp; Đã render: <span id="renderedCount">0</span> videos</div>
+          <div class="capacity-line"><span id="capacityInfo">—</span></div>
           <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
           <div class="progress-label" id="progressLabel">Sẵn sàng.</div>
         </div>
@@ -1240,7 +1240,6 @@ async function selectProject(safe, reload=true) {
     hdr.className = 'active';
     document.getElementById('projectBadge').textContent = `${p.image_count} ảnh · ${p.rendered_count} rendered`;
     document.getElementById('projectBadge').style.display = '';
-    document.getElementById('renderedCount').textContent = p.rendered_count;
     document.getElementById('btnRename').style.display = '';
     document.getElementById('btnDupProject').style.display = '';
     document.getElementById('btnDelete').style.display = '';
@@ -1667,7 +1666,7 @@ function connectSSE() {
             if (p) {
               state.current.rendered_count = p.rendered_count;
               document.getElementById('projectBadge').textContent = `${p.image_count} ảnh · ${p.rendered_count} rendered`;
-              document.getElementById('renderedCount').textContent = p.rendered_count;
+              loadCapacity();
             }
           }
         });
@@ -1824,10 +1823,13 @@ async function loadCapacity() {
   el.textContent = '...';
   try {
     const c = await api.get(`/api/projects/${enc(state.current.safe)}/capacity`);
-    const pct = c.total_ordered > 0 ? Math.round(c.history_used / c.total_ordered * 100) : 0;
+    const rendered = state.current.rendered_count || 0;
+    const total = c.total_ordered > 0 ? c.total_ordered : 0;
+    const pct = total > 0 ? Math.round(rendered / total * 100) : 0;
     el.innerHTML =
-      `<span style="color:var(--text);font-weight:700">${c.effective_max}</span> combo còn lại` +
-      ` · đã render <span style="color:var(--primary);font-weight:600">${c.history_used}</span>/${c.total_ordered} (${pct}%)`;
+      `Capacity: <span style="color:var(--text);font-weight:700">${c.effective_max}</span> combo còn lại` +
+      ` &nbsp;·&nbsp; đã render <span style="color:var(--primary);font-weight:600">${rendered}</span>` +
+      (total > 0 ? `/${total} <span style="color:var(--muted)">(${pct}%)</span>` : ' videos');
   } catch(e) { el.textContent = '—'; }
 }
 

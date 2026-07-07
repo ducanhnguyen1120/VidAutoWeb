@@ -367,6 +367,10 @@ async def stream_render(safe: str):
             # Finished?
             status = current["status"]
             if status in ("done", "error", "stopped", "cancelled"):
+                # Flush remaining log lines before closing
+                for row in logs_since(job_id, last_log_id):
+                    yield f"data: {json.dumps({'type': 'log', 'msg': row['msg']}, ensure_ascii=False)}\n\n"
+                    last_log_id = row["id"]
                 yield f"data: {json.dumps({'type': 'done', 'status': status})}\n\n"
                 return
             if status == "cancelling":
