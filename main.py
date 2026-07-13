@@ -878,10 +878,10 @@ async def replace_audio_run(payload: dict):
 
                 # Step 2: mix audio
                 fc = (
-                    f"[1:a]volume={music_volume},"
+                    f"[0:a]volume={music_volume},"
                     f"atrim=duration={duration},"
                     f"asetpts=PTS-STARTPTS[music];"
-                    f"[2:a]volume={voice_volume},"
+                    f"[1:a]volume={voice_volume},"
                     f"atrim=duration={duration},"
                     f"asetpts=PTS-STARTPTS[voice];"
                     f"[music][voice]"
