@@ -6,7 +6,9 @@ import json
 import shutil
 import subprocess as _sp
 import sys
+import tempfile
 import time
+import traceback
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -853,7 +855,7 @@ async def replace_audio_run(payload: dict):
             yield f"data: {json.dumps({'type':'log','msg':f'[{i}/{total}] {video_path.name}'}, ensure_ascii=False)}\n\n"
 
             out_file  = out_path / f"{base_name}_{i:03d}.mp4"
-            tmp_audio = Path(f"/tmp/vidauto_ra_{i}_{int(time.time())}.m4a")
+            tmp_audio = Path(tempfile.gettempdir()) / f"vidauto_ra_{i}_{int(time.time())}.m4a"
 
             try:
                 # Step 1: lấy duration
@@ -921,7 +923,8 @@ async def replace_audio_run(payload: dict):
                 ok_count += 1
 
             except Exception as exc:
-                yield f"data: {json.dumps({'type':'log','msg':f'  ✗ {exc}'}, ensure_ascii=False)}\n\n"
+                err_msg = str(exc) or traceback.format_exc().strip().splitlines()[-1]
+                yield f"data: {json.dumps({'type':'log','msg':f'  ✗ {err_msg}'}, ensure_ascii=False)}\n\n"
                 err_count += 1
             finally:
                 try:
