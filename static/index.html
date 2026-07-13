@@ -923,7 +923,7 @@ input[type="file"] { display: none; }
           <!-- Project row — shown when either music or voice uses "project" -->
           <div id="raProjectRow" style="display:contents">
             <label>Project</label>
-            <select id="raProjectSelect" style="grid-column:2/4">
+            <select id="raProjectSelect" onchange="onRaProjectChange()" style="grid-column:2/4">
               <option value="">— chọn project —</option>
             </select>
           </div>
@@ -2081,12 +2081,41 @@ function onRaSourceChange() {
   const musicSrc = document.getElementById('raMusicSource').value;
   const voiceSrc = document.getElementById('raVoiceSource').value;
   const needProject = musicSrc === 'project' || voiceSrc === 'project';
-  // project row visibility
-  const projRow = document.getElementById('raProjectRow');
-  projRow.style.display = needProject ? 'contents' : 'none';
-  // upload rows
+  document.getElementById('raProjectRow').style.display = needProject ? 'contents' : 'none';
   document.getElementById('raMusicUploadRow').style.display = musicSrc === 'upload' ? 'flex' : 'none';
   document.getElementById('raVoiceUploadRow').style.display = voiceSrc === 'upload' ? 'flex' : 'none';
+  syncRaSettingsFromProject();
+}
+
+function onRaProjectChange() {
+  syncRaSettingsFromProject();
+}
+
+function syncRaSettingsFromProject() {
+  const musicSrc = document.getElementById('raMusicSource').value;
+  const voiceSrc = document.getElementById('raVoiceSource').value;
+  const safe = document.getElementById('raProjectSelect').value;
+  const proj = safe ? state.projects.find(p => p.safe === safe) : null;
+  const cfg = proj ? { ...proj.config } : {};
+
+  const startEl = document.getElementById('raMusicStart');
+  const mvolEl  = document.getElementById('raMusicVol');
+  const vvolEl  = document.getElementById('raVoiceVol');
+
+  if (musicSrc === 'project') {
+    if (cfg.MUSIC_START_SECONDS !== undefined) startEl.value = cfg.MUSIC_START_SECONDS;
+    if (cfg.MUSIC_VOLUME        !== undefined) mvolEl.value  = cfg.MUSIC_VOLUME;
+    startEl.readOnly = true; mvolEl.readOnly = true;
+  } else {
+    startEl.readOnly = false; mvolEl.readOnly = false;
+  }
+
+  if (voiceSrc === 'project') {
+    if (cfg.VOICE_VOLUME !== undefined) vvolEl.value = cfg.VOICE_VOLUME;
+    vvolEl.readOnly = true;
+  } else {
+    vvolEl.readOnly = false;
+  }
 }
 
 async function browseRaDir(targetId) {
