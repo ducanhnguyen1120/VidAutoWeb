@@ -831,7 +831,8 @@ async def replace_audio_run(payload: dict):
     if not videos:
         raise HTTPException(400, "Không tìm thấy video nào trong input dir")
 
-    out_path = Path(output_dir) if output_dir else in_path.parent / base_name
+    base_dir = Path(output_dir) if output_dir else in_path.parent
+    out_path = base_dir / base_name
     out_path.mkdir(parents=True, exist_ok=True)
 
     ffmpeg_bin  = _ffmpeg()
