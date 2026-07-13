@@ -779,16 +779,19 @@ async def replace_audio_run(payload: dict):
     voice_volume = float(payload.get("voice_volume", 4.5))
     limit_n = payload.get("limit")
 
-    # Resolve audio paths
-    audio_source = payload.get("audio_source", "upload")
-    if audio_source == "project":
+    # Resolve audio paths — music and voice each have independent source
+    music_source = payload.get("music_source", payload.get("audio_source", "upload"))
+    voice_source = payload.get("voice_source", payload.get("audio_source", "upload"))
+
+    proj = None
+    if music_source == "project" or voice_source == "project":
         project_safe = payload.get("project_safe", "")
-        p = _get_project(project_safe)
-        music_path = str(p.music)  if (p.music  and p.music.exists())  else ""
-        voice_path = str(p.voice)  if (p.voice  and p.voice.exists())  else ""
-    else:
-        music_path = (payload.get("music_path") or "").strip()
-        voice_path = (payload.get("voice_path") or "").strip()
+        proj = _get_project(project_safe)
+
+    music_path = (str(proj.music) if (proj and proj.music and proj.music.exists()) else "") \
+        if music_source == "project" else (payload.get("music_path") or "").strip()
+    voice_path = (str(proj.voice) if (proj and proj.voice and proj.voice.exists()) else "") \
+        if voice_source == "project" else (payload.get("voice_path") or "").strip()
 
     # Validate
     errors = []

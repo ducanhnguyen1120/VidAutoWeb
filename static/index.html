@@ -920,35 +920,41 @@ input[type="file"] { display: none; }
       <div class="card">
         <div class="card-title">Audio Source</div>
         <div class="ra-grid">
-          <label>Nguồn</label>
-          <select id="raAudioSource" onchange="onRaAudioSourceChange(this.value)" style="grid-column:2/4">
-            <option value="project">Từ project</option>
-            <option value="upload">Upload riêng</option>
-          </select>
-          <div id="raProjectSection" class="ra-sub">
+          <!-- Project row — shown when either music or voice uses "project" -->
+          <div id="raProjectRow" style="display:contents">
             <label>Project</label>
             <select id="raProjectSelect" style="grid-column:2/4">
               <option value="">— chọn project —</option>
             </select>
           </div>
-          <div id="raUploadSection" class="ra-sub" style="display:none">
-            <label>Music</label>
-            <span id="raMusicName" style="font-size:12px;font-family:var(--mono);color:var(--muted)">Chưa upload</span>
-            <button class="btn-secondary btn-sm" onclick="uploadRaAudio('music')">Upload</button>
-            <label>Voice</label>
-            <span id="raVoiceName" style="font-size:12px;font-family:var(--mono);color:var(--muted)">Chưa upload</span>
-            <button class="btn-secondary btn-sm" onclick="uploadRaAudio('voice')">Upload</button>
-          </div>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-title">Settings</div>
-        <div class="ra-grid">
+          <!-- Music -->
+          <label style="font-weight:600;padding-top:6px;border-top:1px solid var(--border);margin-top:4px">Music</label>
+          <select id="raMusicSource" onchange="onRaSourceChange()" style="grid-column:2/4;margin-top:4px;border-top:1px solid var(--border)">
+            <option value="project">Từ project</option>
+            <option value="upload">Upload mới</option>
+          </select>
+          <div id="raMusicUploadRow" style="display:none;grid-column:1/-1;display:none;align-items:center;gap:8px">
+            <label>File</label>
+            <span id="raMusicName" style="font-size:12px;font-family:var(--mono);color:var(--muted);flex:1">Chưa upload</span>
+            <button class="btn-secondary btn-sm" onclick="uploadRaAudio('music')">Upload</button>
+          </div>
           <label>Music start (s)</label>
           <input id="raMusicStart" type="text" value="72" style="grid-column:2/4">
           <label>Music volume</label>
           <input id="raMusicVol" type="text" value="0.6" style="grid-column:2/4">
+
+          <!-- Voice -->
+          <label style="font-weight:600;padding-top:6px;border-top:1px solid var(--border);margin-top:4px">Voice</label>
+          <select id="raVoiceSource" onchange="onRaSourceChange()" style="grid-column:2/4;margin-top:4px;border-top:1px solid var(--border)">
+            <option value="project">Từ project</option>
+            <option value="upload">Upload mới</option>
+          </select>
+          <div id="raVoiceUploadRow" style="display:none;grid-column:1/-1;align-items:center;gap:8px">
+            <label>File</label>
+            <span id="raVoiceName" style="font-size:12px;font-family:var(--mono);color:var(--muted);flex:1">Chưa upload</span>
+            <button class="btn-secondary btn-sm" onclick="uploadRaAudio('voice')">Upload</button>
+          </div>
           <label>Voice volume</label>
           <input id="raVoiceVol" type="text" value="4.5" style="grid-column:2/4">
         </div>
@@ -2071,9 +2077,16 @@ function populateRaProjectSelect() {
   if (state.current) sel.value = state.current.safe;
 }
 
-function onRaAudioSourceChange(val) {
-  document.getElementById('raProjectSection').style.display = val === 'project' ? 'grid' : 'none';
-  document.getElementById('raUploadSection').style.display  = val === 'upload'  ? 'grid' : 'none';
+function onRaSourceChange() {
+  const musicSrc = document.getElementById('raMusicSource').value;
+  const voiceSrc = document.getElementById('raVoiceSource').value;
+  const needProject = musicSrc === 'project' || voiceSrc === 'project';
+  // project row visibility
+  const projRow = document.getElementById('raProjectRow');
+  projRow.style.display = needProject ? 'contents' : 'none';
+  // upload rows
+  document.getElementById('raMusicUploadRow').style.display = musicSrc === 'upload' ? 'flex' : 'none';
+  document.getElementById('raVoiceUploadRow').style.display = voiceSrc === 'upload' ? 'flex' : 'none';
 }
 
 async function browseRaDir(targetId) {
@@ -2115,7 +2128,8 @@ async function uploadRaAudio(kind) {
 async function runReplaceAudio() {
   const inputDir   = document.getElementById('raInputDir').value.trim();
   const outputDir  = document.getElementById('raOutputDir').value.trim();
-  const audioSrc   = document.getElementById('raAudioSource').value;
+  const musicSrc   = document.getElementById('raMusicSource').value;
+  const voiceSrc   = document.getElementById('raVoiceSource').value;
   const musicStart = parseFloat(document.getElementById('raMusicStart').value) || 72;
   const musicVol   = parseFloat(document.getElementById('raMusicVol').value)   || 0.6;
   const voiceVol   = parseFloat(document.getElementById('raVoiceVol').value)   || 4.5;
@@ -2125,19 +2139,23 @@ async function runReplaceAudio() {
   if (!inputDir) { toast('Chưa chọn thư mục input', 'error'); return; }
 
   const payload = {
-    input_dir: inputDir, output_dir: outputDir, audio_source: audioSrc,
+    input_dir: inputDir, output_dir: outputDir,
+    music_source: musicSrc, voice_source: voiceSrc,
     music_start: musicStart, music_volume: musicVol, voice_volume: voiceVol,
   };
   if (limit) payload.limit = limit;
 
-  if (audioSrc === 'project') {
+  if (musicSrc === 'project' || voiceSrc === 'project') {
     const safe = document.getElementById('raProjectSelect').value;
-    if (!safe) { toast('Chọn project để lấy audio', 'error'); return; }
+    if (!safe) { toast('Chọn project để lấy audio từ project', 'error'); return; }
     payload.project_safe = safe;
-  } else {
+  }
+  if (musicSrc === 'upload') {
     if (!_raUploadedPaths.music) { toast('Chưa upload music', 'error'); return; }
-    if (!_raUploadedPaths.voice) { toast('Chưa upload voice', 'error'); return; }
     payload.music_path = _raUploadedPaths.music;
+  }
+  if (voiceSrc === 'upload') {
+    if (!_raUploadedPaths.voice) { toast('Chưa upload voice', 'error'); return; }
     payload.voice_path = _raUploadedPaths.voice;
   }
 
