@@ -857,20 +857,26 @@ async def replace_audio_run(payload: dict):
             out_file  = out_path / f"{base_name}_{i:03d}.mp4"
             tmp_audio = Path(tempfile.gettempdir()) / f"vidauto_ra_{i}_{int(time.time())}.m4a"
 
-            try:
-                # Step 1: lấy duration
-                probe = await asyncio.create_subprocess_exec(
-                    ffprobe_bin, "-v", "error",
-                    "-show_entries", "format=duration",
-                    "-of", "default=noprint_wrappers=1:nokey=1",
-                    str(video_path),
-                    stdout=asyncio.subprocess.PIPE,
-                    stderr=asyncio.subprocess.PIPE,
-                )
-                stdout, _ = await probe.communicate()
-                duration = float(stdout.decode().strip())
+            def _run_video(vpath, ofile, tmp_a):
+                def _run(cmd):
+                    r = _sp.run(cmd, capture_output=True)
+                    return r.returncode, r.stderr
 
-                # Step 2: mix audio → /tmp (tránh OneDrive lock)
+                # Step 1: lấy duration
+                rc, se = _run([ffprobe_bin, "-v", "error",
+                               "-show_entries", "format=duration",
+                               "-of", "default=noprint_wrappers=1:nokey=1",
+                               str(vpath)])
+                probe_out = _sp.run(
+                    [ffprobe_bin, "-v", "error",
+                     "-show_entries", "format=duration",
+                     "-of", "default=noprint_wrappers=1:nokey=1",
+                     str(vpath)],
+                    capture_output=True,
+                ).stdout.decode().strip()
+                duration = float(probe_out)
+
+                # Step 2: mix audio
                 fc = (
                     f"[1:a]volume={music_volume},"
                     f"atrim=duration={duration},"
@@ -883,41 +889,32 @@ async def replace_audio_run(payload: dict):
                     f"atrim=duration={duration},"
                     f"asetpts=PTS-STARTPTS[aout]"
                 )
-                cmd1 = [
+                rc1, err1 = _run([
                     ffmpeg_bin, "-y",
                     "-ss", str(music_start), "-i", music_path,
                     "-i", voice_path,
                     "-filter_complex", fc,
                     "-map", "[aout]", "-c:a", "aac",
-                    str(tmp_audio),
-                ]
-                p1 = await asyncio.create_subprocess_exec(
-                    *cmd1,
-                    stdout=asyncio.subprocess.PIPE,
-                    stderr=asyncio.subprocess.PIPE,
-                )
-                _, err1 = await p1.communicate()
-                if p1.returncode != 0:
-                    raise Exception("audio mix: " + err1.decode(errors="replace")[-200:])
+                    str(tmp_a),
+                ])
+                if rc1 != 0:
+                    raise Exception("audio mix: " + err1.decode(errors="replace")[-300:])
 
                 # Step 3: mux video + audio
-                cmd2 = [
+                rc2, err2 = _run([
                     ffmpeg_bin, "-y",
-                    "-i", str(video_path),
-                    "-i", str(tmp_audio),
+                    "-i", str(vpath),
+                    "-i", str(tmp_a),
                     "-map", "0:v:0", "-map", "1:a:0",
                     "-c:v", "copy", "-c:a", "copy",
                     "-shortest",
-                    str(out_file),
-                ]
-                p2 = await asyncio.create_subprocess_exec(
-                    *cmd2,
-                    stdout=asyncio.subprocess.PIPE,
-                    stderr=asyncio.subprocess.PIPE,
-                )
-                _, err2 = await p2.communicate()
-                if p2.returncode != 0:
-                    raise Exception("mux: " + err2.decode(errors="replace")[-200:])
+                    str(ofile),
+                ])
+                if rc2 != 0:
+                    raise Exception("mux: " + err2.decode(errors="replace")[-300:])
+
+            try:
+                await asyncio.to_thread(_run_video, video_path, out_file, tmp_audio)
 
                 yield f"data: {json.dumps({'type':'log','msg':f'  ✓ {out_file.name}'}, ensure_ascii=False)}\n\n"
                 ok_count += 1
