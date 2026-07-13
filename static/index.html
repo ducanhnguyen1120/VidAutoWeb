@@ -920,13 +920,11 @@ input[type="file"] { display: none; }
       <div class="card">
         <div class="card-title">Audio Source</div>
         <div class="ra-grid">
-          <!-- Project row — shown when either music or voice uses "project" -->
-          <div id="raProjectRow" style="display:contents">
-            <label>Project</label>
-            <select id="raProjectSelect" onchange="onRaProjectChange()" style="grid-column:2/4">
-              <option value="">— chọn project —</option>
-            </select>
-          </div>
+          <!-- Project row — always visible, dùng cho naming + audio source -->
+          <label>Project</label>
+          <select id="raProjectSelect" onchange="onRaProjectChange()" style="grid-column:2/4">
+            <option value="">— chọn project —</option>
+          </select>
 
           <!-- Music -->
           <label style="font-weight:600;padding-top:6px;border-top:1px solid var(--border);margin-top:4px">Music</label>
@@ -963,8 +961,10 @@ input[type="file"] { display: none; }
       <div class="card">
         <div class="card-title">Output</div>
         <div class="ra-grid">
+          <label>Name Suffix</label>
+          <input id="raNameSuffix" type="text" placeholder="Để trống → {Proj}_R" style="grid-column:2/4">
           <label>Thư mục lưu</label>
-          <input id="raOutputDir" type="text" placeholder="Để trống → tự tạo _replaced bên cạnh input">
+          <input id="raOutputDir" type="text" placeholder="Để trống → tự tạo bên cạnh input">
           <button class="btn-secondary btn-sm" onclick="browseRaDir('raOutputDir')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
           </button>
@@ -2080,8 +2080,6 @@ function populateRaProjectSelect() {
 function onRaSourceChange() {
   const musicSrc = document.getElementById('raMusicSource').value;
   const voiceSrc = document.getElementById('raVoiceSource').value;
-  const needProject = musicSrc === 'project' || voiceSrc === 'project';
-  document.getElementById('raProjectRow').style.display = needProject ? 'contents' : 'none';
   document.getElementById('raMusicUploadRow').style.display = musicSrc === 'upload' ? 'flex' : 'none';
   document.getElementById('raVoiceUploadRow').style.display = voiceSrc === 'upload' ? 'flex' : 'none';
   syncRaSettingsFromProject();
@@ -2167,17 +2165,18 @@ async function runReplaceAudio() {
 
   if (!inputDir) { toast('Chưa chọn thư mục input', 'error'); return; }
 
+  const nameSuffix = document.getElementById('raNameSuffix').value.trim();
+  const projSafe   = document.getElementById('raProjectSelect').value;
   const payload = {
     input_dir: inputDir, output_dir: outputDir,
     music_source: musicSrc, voice_source: voiceSrc,
     music_start: musicStart, music_volume: musicVol, voice_volume: voiceVol,
+    name_suffix: nameSuffix, project_safe: projSafe,
   };
   if (limit) payload.limit = limit;
 
   if (musicSrc === 'project' || voiceSrc === 'project') {
-    const safe = document.getElementById('raProjectSelect').value;
-    if (!safe) { toast('Chọn project để lấy audio từ project', 'error'); return; }
-    payload.project_safe = safe;
+    if (!projSafe) { toast('Chọn project để lấy audio từ project', 'error'); return; }
   }
   if (musicSrc === 'upload') {
     if (!_raUploadedPaths.music) { toast('Chưa upload music', 'error'); return; }

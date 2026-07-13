@@ -783,15 +783,24 @@ async def replace_audio_run(payload: dict):
     music_source = payload.get("music_source", payload.get("audio_source", "upload"))
     voice_source = payload.get("voice_source", payload.get("audio_source", "upload"))
 
-    proj = None
-    if music_source == "project" or voice_source == "project":
-        project_safe = payload.get("project_safe", "")
-        proj = _get_project(project_safe)
+    # Load project (for audio and/or naming)
+    project_safe = payload.get("project_safe", "")
+    proj = _get_project(project_safe) if project_safe else None
 
     music_path = (str(proj.music) if (proj and proj.music and proj.music.exists()) else "") \
         if music_source == "project" else (payload.get("music_path") or "").strip()
     voice_path = (str(proj.voice) if (proj and proj.voice and proj.voice.exists()) else "") \
         if voice_source == "project" else (payload.get("voice_path") or "").strip()
+
+    # Build base name: {ProjName}_R[_{suffix}]
+    name_suffix = "".join(c if c.isalnum() or c in "-_" else "_"
+                          for c in (payload.get("name_suffix") or "").strip()).strip("_")
+    if proj:
+        proj_slug = "".join(c if c.isalnum() or c in "-_" else "_"
+                            for c in proj.name).strip("_")
+    else:
+        proj_slug = "video"
+    base_name = f"{proj_slug}_R_{name_suffix}" if name_suffix else f"{proj_slug}_R"
 
     # Validate
     errors = []
@@ -820,8 +829,7 @@ async def replace_audio_run(payload: dict):
     if not videos:
         raise HTTPException(400, "Không tìm thấy video nào trong input dir")
 
-    out_path = (Path(output_dir) if output_dir
-                else in_path.parent / (in_path.name + "_replaced"))
+    out_path = Path(output_dir) if output_dir else in_path.parent / base_name
     out_path.mkdir(parents=True, exist_ok=True)
 
     ffmpeg_bin  = _ffmpeg()
@@ -844,7 +852,7 @@ async def replace_audio_run(payload: dict):
             yield f"data: {json.dumps({'type':'progress','done':i-1,'total':total,'label':f'{i-1}/{total}'}, ensure_ascii=False)}\n\n"
             yield f"data: {json.dumps({'type':'log','msg':f'[{i}/{total}] {video_path.name}'}, ensure_ascii=False)}\n\n"
 
-            out_file  = out_path / (video_path.stem + ".mp4")
+            out_file  = out_path / f"{base_name}_{i:03d}.mp4"
             tmp_audio = Path(f"/tmp/vidauto_ra_{i}_{int(time.time())}.m4a")
 
             try:
