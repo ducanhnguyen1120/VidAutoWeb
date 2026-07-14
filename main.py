@@ -30,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from job_queue import (
     create_job, get_pending, claim, update_progress, add_log,
     finish, cancel, get_job, latest_for_project, logs_since, list_jobs, cleanup_stale,
+    total_rendered_for_project,
 )
 from project_manager import Project, PROJECTS_DIR
 from template_manager import Template, TEMPLATES_DIR
@@ -75,20 +76,7 @@ def _get_project(safe: str) -> Project:
 
 
 def _count_rendered(p: Project) -> int:
-    dirs_to_scan: set[Path] = set()
-    if p.output_dir.exists():
-        dirs_to_scan.add(p.output_dir)
-    for job in list_jobs(project_safe=p.safe, limit=500):
-        od = job.get("output_dir", "")
-        if od:
-            dirs_to_scan.add(Path(od))
-    total = 0
-    for d in dirs_to_scan:
-        try:
-            total += sum(1 for _ in d.rglob("*.mp4"))
-        except Exception:
-            pass
-    return total
+    return total_rendered_for_project(p.safe)
 
 
 def _project_dict(p: Project) -> dict:
@@ -432,7 +420,7 @@ def worker_log(job_id: str, payload: dict):
 
 @app.post("/api/worker/jobs/{job_id}/complete")
 def worker_complete(job_id: str, payload: dict):
-    finish(job_id, payload.get("status", "done"))
+    finish(job_id, payload.get("status", "done"), int(payload.get("videos_ok", 0)))
     return {"ok": True}
 
 

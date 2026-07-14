@@ -176,10 +176,10 @@ def _process_job(job: dict):
                 batch_name_prefix=batch_name,
                 project_name=proj.get("name", safe),
             )
-            engine.run()
+            videos_ok = engine.run()
 
             session.post(f"{SERVER}/api/worker/jobs/{job_id}/complete",
-                         json={"status": "done"}, timeout=5)
+                         json={"status": "done", "videos_ok": videos_ok}, timeout=5)
             log("✓ Render hoàn tất.")
 
         except Exception as exc:

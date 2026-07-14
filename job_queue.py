@@ -34,10 +34,15 @@ def _init():
                 progress_done  INTEGER DEFAULT 0,
                 progress_total INTEGER DEFAULT 0,
                 progress_label TEXT DEFAULT '',
+                videos_ok      INTEGER DEFAULT 0,
                 created_at     TEXT,
                 updated_at     TEXT
             )
         """)
+        c.execute("ALTER TABLE jobs ADD COLUMN videos_ok INTEGER DEFAULT 0"
+                  ) if "videos_ok" not in [
+            r[1] for r in c.execute("PRAGMA table_info(jobs)")
+        ] else None
         c.execute("""
             CREATE TABLE IF NOT EXISTS job_logs (
                 id      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -94,11 +99,11 @@ def add_log(job_id: str, msg: str):
         )
 
 
-def finish(job_id: str, status: str = "done"):
+def finish(job_id: str, status: str = "done", videos_ok: int = 0):
     with _conn() as c:
         c.execute(
-            "UPDATE jobs SET status=?, updated_at=? WHERE id=?",
-            (status, _now(), job_id),
+            "UPDATE jobs SET status=?, videos_ok=?, updated_at=? WHERE id=?",
+            (status, videos_ok, _now(), job_id),
         )
 
 
@@ -167,6 +172,15 @@ def latest_for_project(project_safe: str) -> dict | None:
             (project_safe,),
         ).fetchone()
         return dict(r) if r else None
+
+
+def total_rendered_for_project(project_safe: str) -> int:
+    with _conn() as c:
+        r = c.execute(
+            "SELECT COALESCE(SUM(videos_ok), 0) FROM jobs WHERE project_safe=? AND status='done'",
+            (project_safe,),
+        ).fetchone()
+        return int(r[0]) if r else 0
 
 
 def logs_since(job_id: str, since_id: int = 0) -> list[dict]:
