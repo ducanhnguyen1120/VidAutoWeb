@@ -1,11 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VidAuto By Dan</title>
 <link rel="icon" type="image/png" href="/favicon.png">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -34,7 +33,7 @@
   --mono:      'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
 }
 
-/* â”€â”€ Dark mode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Dark mode ───────────────────────────────────────────────────────────── */
 .dark {
   --bg:        #09090B;
   --surface:   #111113;
@@ -48,7 +47,7 @@
   --danger-bg: rgba(239,68,68,0.1);
 }
 
-/* â”€â”€ Rainbow button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Rainbow button ──────────────────────────────────────────────────────── */
 @property --rb-angle {
   syntax: "<angle>";
   initial-value: 0deg;
@@ -86,7 +85,7 @@
 .btn-rainbow:hover:not(:disabled)::after { background: var(--primary-d); }
 .btn-rainbow:hover:not(:disabled) { transform: translateY(-1px); }
 
-/* â”€â”€ Theme toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Theme toggle ────────────────────────────────────────────────────────── */
 .theme-toggle {
   width: 34px; height: 20px;
   background: var(--surface3);
@@ -110,7 +109,7 @@
 .dark .theme-toggle { background: var(--primary); border-color: transparent; }
 .dark .theme-toggle::after { transform: translateX(14px); background: #fff; }
 
-/* â”€â”€ Project dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Project dropdown ────────────────────────────────────────────────────── */
 .proj-menu-btn {
   opacity: 0;
   background: none;
@@ -178,7 +177,7 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
 
-/* â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Header ──────────────────────────────────────────────────────────────── */
 header {
   position: relative;
   z-index: 50;
@@ -234,7 +233,7 @@ header {
 
 #projectSelect { display: none; }
 
-/* â”€â”€ Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
 button {
   cursor: pointer;
   border: none;
@@ -284,10 +283,10 @@ button {
 .btn-sm { padding: 4px 10px; font-size: 11px; }
 button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
-/* â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Layout ──────────────────────────────────────────────────────────────── */
 .main { position: relative; z-index: 1; display: flex; flex: 1; overflow: hidden; }
 
-/* â”€â”€ Sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
 .sidebar {
   width: 216px;
   background: var(--surface);
@@ -343,7 +342,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
 .proj-name { font-weight: 700; font-size: 12px; margin-bottom: 3px; color: var(--text); }
 .proj-meta { font-size: 10px; color: var(--muted); }
 
-/* â”€â”€ Workspace â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Workspace ───────────────────────────────────────────────────────────── */
 .workspace { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
 
 .welcome {
@@ -354,7 +353,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
 .welcome h2 { color: var(--text); font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
 .welcome p { font-size: 13px; }
 
-/* â”€â”€ Tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Tabs ────────────────────────────────────────────────────────────────── */
 .tabs {
   display: flex;
   gap: 1px;
@@ -380,7 +379,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
 .tab-content { display: none; flex: 1; overflow-y: auto; padding: 14px; gap: 10px; }
 .tab-content.active { display: flex; flex-direction: column; }
 
-/* â”€â”€ Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Cards ───────────────────────────────────────────────────────────────── */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -398,7 +397,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
   margin-bottom: 12px;
 }
 
-/* â”€â”€ Files tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Files tab ───────────────────────────────────────────────────────────── */
 .file-row {
   display: flex; align-items: center; gap: 10px;
   padding: 8px 0; border-bottom: 1px solid var(--border);
@@ -442,7 +441,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
   color: var(--primary);
 }
 
-/* â”€â”€ Settings tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Settings tab ────────────────────────────────────────────────────────── */
 .settings-actions { display: flex; gap: 8px; }
 .settings-grid { display: grid; grid-template-columns: 190px 1fr 1fr; gap: 5px 12px; align-items: center; }
 .settings-section {
@@ -470,7 +469,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
   box-shadow: 0 0 0 3px var(--glow);
 }
 
-/* â”€â”€ Render tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Render tab ──────────────────────────────────────────────────────────── */
 .render-output-opts input {
   background: var(--surface2); color: var(--text);
   border: 1px solid var(--border); border-radius: var(--r-sm);
@@ -553,7 +552,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
 .video-item a { color: var(--primary); text-decoration: none; font-weight: 600; font-family: var(--mono); }
 .video-item a:hover { color: var(--primary-d); }
 
-/* â”€â”€ Modals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Modals ──────────────────────────────────────────────────────────────── */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 100;
   background: rgba(0,0,0,0.4);
@@ -578,7 +577,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
 .modal input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--glow); }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
 
-/* â”€â”€ Toast (top-center, large, pill) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Toast (top-center, large, pill) ─────────────────────────────────────── */
 #toastContainer {
   position: fixed;
   top: 20px;
@@ -646,7 +645,7 @@ button:disabled { opacity: .4; cursor: not-allowed; transform: none !important; 
 
 input[type="file"] { display: none; }
 
-/* â”€â”€ Replace Audio view â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Replace Audio view ──────────────────────────────────────────────────── */
 .ra-header {
   padding: 0 16px; border-bottom: 1px solid var(--border);
   background: var(--surface); flex-shrink: 0;
@@ -664,7 +663,7 @@ input[type="file"] { display: none; }
 .ra-grid input:focus, .ra-grid select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--glow); }
 .ra-sub { display: grid; grid-template-columns: 130px 1fr auto; gap: 7px 10px; align-items: center; grid-column: 1/-1; }
 
-/* â”€â”€ Worker status â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Worker status ───────────────────────────────────────────────────────── */
 .worker-pill {
   display: flex; align-items: center; gap: 5px;
   padding: 4px 12px; border-radius: 20px;
@@ -695,7 +694,7 @@ input[type="file"] { display: none; }
   font-weight: 500;
 }
 
-/* â”€â”€ Templates section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Templates section ───────────────────────────────────────────────────── */
 .tmpl-section {
   flex-shrink: 0;
   max-height: 44%;
@@ -727,17 +726,17 @@ input[type="file"] { display: none; }
 
 <header>
   <div class="logo">VidAuto By Dan</div>
-  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Chuyá»ƒn light/dark"></button>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Chuyển light/dark"></button>
   <select id="projectSelect" onchange="onProjectChange(this.value)"></select>
   <div class="header-sep"></div>
-  <span id="headerProjectName">Chá»n project tá»« sidebar</span>
+  <span id="headerProjectName">Chọn project từ sidebar</span>
   <span class="badge" id="projectBadge" style="display:none"></span>
   <button class="btn-secondary btn-sm" id="btnRename" style="display:none" onclick="showRenameModal()">Rename</button>
   <button class="btn-secondary btn-sm" id="btnDupProject" style="display:none" onclick="duplicateProject()" title="Duplicate project">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Dup
   </button>
   <button class="btn-danger btn-sm" id="btnDelete" style="display:none" onclick="deleteProject()">Delete</button>
-  <div class="worker-pill offline" id="workerPill" title="Tráº¡ng thÃ¡i Mac worker">
+  <div class="worker-pill offline" id="workerPill" title="Trạng thái Mac worker">
     <span class="worker-dot"></span>
     <span id="workerLabel">Worker</span>
   </div>
@@ -761,10 +760,10 @@ input[type="file"] { display: none; }
     <div class="tmpl-section">
       <div class="sidebar-header">
         <span>Templates</span>
-        <button class="btn-primary btn-sm" onclick="showSaveTemplateModal()" title="LÆ°u project hiá»‡n táº¡i lÃ m template">+</button>
+        <button class="btn-primary btn-sm" onclick="showSaveTemplateModal()" title="Lưu project hiện tại làm template">+</button>
       </div>
       <div class="tmpl-list" id="templateList">
-        <div class="tmpl-empty">ChÆ°a cÃ³ template</div>
+        <div class="tmpl-empty">Chưa có template</div>
       </div>
     </div>
   </div>
@@ -777,8 +776,8 @@ input[type="file"] { display: none; }
         <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
       </div>
       <h2>VidAuto Web</h2>
-      <p>Chá»n hoáº·c táº¡o project Ä‘á»ƒ báº¯t Ä‘áº§u</p>
-      <button class="btn-primary" style="margin-top:4px" onclick="showCreateModal()">+ Táº¡o project má»›i</button>
+      <p>Chọn hoặc tạo project để bắt đầu</p>
+      <button class="btn-primary" style="margin-top:4px" onclick="showCreateModal()">+ Tạo project mới</button>
     </div>
 
     <div id="projectWorkspace" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
@@ -797,13 +796,13 @@ input[type="file"] { display: none; }
             <button class="btn-primary btn-sm" onclick="document.getElementById('imgInput').click()">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload
             </button>
-            <button class="btn-secondary btn-sm" onclick="removeSelectedImages()">XoÃ¡ Ä‘Ã£ chá»n</button>
-            <button class="btn-danger btn-sm" onclick="clearAllImages()">XoÃ¡ háº¿t</button>
-            <span class="img-count" id="imgCount">0 áº£nh</span>
+            <button class="btn-secondary btn-sm" onclick="removeSelectedImages()">Xoá đã chọn</button>
+            <button class="btn-danger btn-sm" onclick="clearAllImages()">Xoá hết</button>
+            <span class="img-count" id="imgCount">0 ảnh</span>
           </div>
           <div class="drop-zone" id="dropZone" onclick="document.getElementById('imgInput').click()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 8px;opacity:0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            KÃ©o tháº£ áº£nh vÃ o Ä‘Ã¢y hoáº·c click Ä‘á»ƒ chá»n
+            Kéo thả ảnh vào đây hoặc click để chọn
           </div>
           <div class="image-list" id="imageList" style="margin-top:8px"></div>
           <input type="file" id="imgInput" multiple accept=".png,.jpg,.jpeg,.webp,.bmp" onchange="uploadImages(this.files)">
@@ -818,12 +817,12 @@ input[type="file"] { display: none; }
       <!-- SETTINGS TAB -->
       <div class="tab-content" id="tab-settings">
         <div class="settings-actions" style="position:sticky;top:0;z-index:10;background:var(--bg);padding-bottom:10px;margin-bottom:2px">
-          <button class="btn-primary" onclick="saveSettings()">LÆ°u Settings</button>
-          <button class="btn-secondary" onclick="saveAsDefault()">LÆ°u lÃ m máº·c Ä‘á»‹nh</button>
-          <button class="btn-secondary" onclick="resetSettings()">Reset máº·c Ä‘á»‹nh</button>
+          <button class="btn-primary" onclick="saveSettings()">Lưu Settings</button>
+          <button class="btn-secondary" onclick="saveAsDefault()">Lưu làm mặc định</button>
+          <button class="btn-secondary" onclick="resetSettings()">Reset mặc định</button>
         </div>
         <div class="card">
-          <div class="card-title">Cáº¥u hÃ¬nh render</div>
+          <div class="card-title">Cấu hình render</div>
           <div class="settings-grid" id="settingsGrid"></div>
         </div>
       </div>
@@ -832,36 +831,36 @@ input[type="file"] { display: none; }
       <div class="tab-content" id="tab-render">
         <div class="card">
           <div class="render-output-opts" style="display:grid;grid-template-columns:100px 1fr auto;gap:6px 10px;align-items:center;margin-bottom:12px;font-size:12px">
-            <span style="color:var(--muted);font-weight:500">TÃªn batch</span>
-            <input id="inputBatchName" type="text" placeholder="Äang táº£i...">
+            <span style="color:var(--muted);font-weight:500">Tên batch</span>
+            <input id="inputBatchName" type="text" placeholder="Đang tải...">
             <span></span>
-            <span style="color:var(--muted);font-weight:500">ThÆ° má»¥c lÆ°u</span>
-            <input id="inputOutputDir" type="text" placeholder="Máº·c Ä‘á»‹nh: output cá»§a project" oninput="saveOutputDir(this.value)">
+            <span style="color:var(--muted);font-weight:500">Thư mục lưu</span>
+            <input id="inputOutputDir" type="text" placeholder="Mặc định: output của project" oninput="saveOutputDir(this.value)">
             <button class="btn-secondary btn-sm" id="btnBrowse" onclick="browseOutputDir()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Browse
             </button>
           </div>
           <div class="offline-banner" id="offlineBanner" style="display:none">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Worker Ä‘ang offline â€” cháº¡y worker.py Ä‘á»ƒ render
+            Worker đang offline — chạy worker.py để render
           </div>
           <div class="render-toolbar">
             <button class="btn-primary btn-rainbow" id="btnStart" onclick="startRender()">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:-1px;margin-right:5px"><polygon points="5 3 19 12 5 21 5 3"/></svg>Báº¯t Ä‘áº§u
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:-1px;margin-right:5px"><polygon points="5 3 19 12 5 21 5 3"/></svg>Bắt đầu
             </button>
             <button class="btn-danger" id="btnStop" onclick="stopRender()" disabled>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:-1px;margin-right:5px"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Dá»«ng
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:-1px;margin-right:5px"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Dừng
             </button>
             <button class="btn-secondary btn-sm" onclick="loadOutputs()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh
             </button>
             <button class="btn-secondary btn-sm" onclick="openOutputFolder()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Má»Ÿ folder
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Mở folder
             </button>
           </div>
-          <div class="capacity-line"><span id="capacityInfo">â€”</span></div>
+          <div class="capacity-line"><span id="capacityInfo">—</span></div>
           <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-          <div class="progress-label" id="progressLabel">Sáºµn sÃ ng.</div>
+          <div class="progress-label" id="progressLabel">Sẵn sàng.</div>
         </div>
 
         <div class="card" style="flex:1;display:flex;flex-direction:column;min-height:0">
@@ -871,7 +870,7 @@ input[type="file"] { display: none; }
 
         <div class="card" id="outputsCard">
           <div class="card-title">Output Videos</div>
-          <div id="outputsList"><span style="color:var(--muted);font-size:11px">ChÆ°a cÃ³ video nÃ o.</span></div>
+          <div id="outputsList"><span style="color:var(--muted);font-size:11px">Chưa có video nào.</span></div>
         </div>
       </div>
 
@@ -884,7 +883,7 @@ input[type="file"] { display: none; }
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh
             </button>
           </div>
-          <div id="queueList"><span style="color:var(--muted);font-size:11px">ChÆ°a cÃ³ job nÃ o.</span></div>
+          <div id="queueList"><span style="color:var(--muted);font-size:11px">Chưa có job nào.</span></div>
         </div>
       </div>
     </div>
@@ -894,49 +893,49 @@ input[type="file"] { display: none; }
   <div id="replaceAudioView" style="display:none;flex:1;flex-direction:column;overflow:hidden">
     <div class="ra-header">
       <button class="btn-secondary btn-sm" onclick="toggleReplaceAudioView()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Quay láº¡i
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:3px"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Quay lại
       </button>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
       <span style="font-size:13px;font-weight:700;color:var(--text)">Replace Audio</span>
-      <span style="font-size:11px;color:var(--muted)">Thay nháº¡c + voice cho video cÃ³ sáºµn</span>
+      <span style="font-size:11px;color:var(--muted)">Thay nhạc + voice cho video có sẵn</span>
     </div>
     <div class="ra-body">
 
       <div class="card">
         <div class="card-title">Input Videos</div>
         <div class="ra-grid">
-          <label>Chá»n batch</label>
+          <label>Chọn batch</label>
           <select id="raBatchSelect" onchange="onRaBatchChange(this.value)" style="grid-column:2/4">
-            <option value="">â€” Ä‘ang táº£i... â€”</option>
+            <option value="">— đang tải... —</option>
           </select>
-          <label>ThÆ° má»¥c input</label>
+          <label>Thư mục input</label>
           <input id="raInputDir" type="text" placeholder="/path/to/video/folder">
           <button class="btn-secondary btn-sm" onclick="browseRaDir('raInputDir')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
           </button>
-          <label>Giá»›i háº¡n</label>
-          <input id="raLimit" type="text" placeholder="Äá»ƒ trá»‘ng = táº¥t cáº£" style="grid-column:2/4">
+          <label>Giới hạn</label>
+          <input id="raLimit" type="text" placeholder="Để trống = tất cả" style="grid-column:2/4">
         </div>
       </div>
 
       <div class="card">
         <div class="card-title">Audio Source</div>
         <div class="ra-grid">
-          <!-- Project row â€” always visible, dÃ¹ng cho naming + audio source -->
+          <!-- Project row — always visible, dùng cho naming + audio source -->
           <label>Project</label>
           <select id="raProjectSelect" onchange="onRaProjectChange()" style="grid-column:2/4">
-            <option value="">â€” chá»n project â€”</option>
+            <option value="">— chọn project —</option>
           </select>
 
           <!-- Music -->
           <label style="font-weight:600;padding-top:6px;border-top:1px solid var(--border);margin-top:4px">Music</label>
           <select id="raMusicSource" onchange="onRaSourceChange()" style="grid-column:2/4;margin-top:4px;border-top:1px solid var(--border)">
-            <option value="project">Tá»« project</option>
-            <option value="upload">Upload má»›i</option>
+            <option value="project">Từ project</option>
+            <option value="upload">Upload mới</option>
           </select>
           <div id="raMusicUploadRow" style="display:none;grid-column:1/-1;display:none;align-items:center;gap:8px">
             <label>File</label>
-            <span id="raMusicName" style="font-size:12px;font-family:var(--mono);color:var(--muted);flex:1">ChÆ°a upload</span>
+            <span id="raMusicName" style="font-size:12px;font-family:var(--mono);color:var(--muted);flex:1">Chưa upload</span>
             <button class="btn-secondary btn-sm" onclick="uploadRaAudio('music')">Upload</button>
           </div>
           <label>Music start (s)</label>
@@ -947,12 +946,12 @@ input[type="file"] { display: none; }
           <!-- Voice -->
           <label style="font-weight:600;padding-top:6px;border-top:1px solid var(--border);margin-top:4px">Voice</label>
           <select id="raVoiceSource" onchange="onRaSourceChange()" style="grid-column:2/4;margin-top:4px;border-top:1px solid var(--border)">
-            <option value="project">Tá»« project</option>
-            <option value="upload">Upload má»›i</option>
+            <option value="project">Từ project</option>
+            <option value="upload">Upload mới</option>
           </select>
           <div id="raVoiceUploadRow" style="display:none;grid-column:1/-1;align-items:center;gap:8px">
             <label>File</label>
-            <span id="raVoiceName" style="font-size:12px;font-family:var(--mono);color:var(--muted);flex:1">ChÆ°a upload</span>
+            <span id="raVoiceName" style="font-size:12px;font-family:var(--mono);color:var(--muted);flex:1">Chưa upload</span>
             <button class="btn-secondary btn-sm" onclick="uploadRaAudio('voice')">Upload</button>
           </div>
           <label>Voice volume</label>
@@ -964,9 +963,9 @@ input[type="file"] { display: none; }
         <div class="card-title">Output</div>
         <div class="ra-grid">
           <label>Name Suffix</label>
-          <input id="raNameSuffix" type="text" placeholder="Äá»ƒ trá»‘ng â†’ {Proj}_R" style="grid-column:2/4">
-          <label>ThÆ° má»¥c lÆ°u</label>
-          <input id="raOutputDir" type="text" placeholder="Äá»ƒ trá»‘ng â†’ tá»± táº¡o bÃªn cáº¡nh input">
+          <input id="raNameSuffix" type="text" placeholder="Để trống → {Proj}_R" style="grid-column:2/4">
+          <label>Thư mục lưu</label>
+          <input id="raOutputDir" type="text" placeholder="Để trống → tự tạo bên cạnh input">
           <button class="btn-secondary btn-sm" onclick="browseRaDir('raOutputDir')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
           </button>
@@ -976,14 +975,14 @@ input[type="file"] { display: none; }
       <div class="card">
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
           <button class="btn-primary" id="raBtnRun" onclick="runReplaceAudio()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:-1px;margin-right:5px"><polygon points="5 3 19 12 5 21 5 3"/></svg>Cháº¡y
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:-1px;margin-right:5px"><polygon points="5 3 19 12 5 21 5 3"/></svg>Chạy
           </button>
           <button class="btn-danger btn-sm" id="raBtnStop" disabled onclick="stopReplaceAudio()">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:-1px;margin-right:4px"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Dá»«ng
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:-1px;margin-right:4px"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Dừng
           </button>
         </div>
         <div class="progress-wrap"><div class="progress-bar" id="raProgressBar" style="width:0%"></div></div>
-        <div class="progress-label" id="raProgressLabel">Sáºµn sÃ ng.</div>
+        <div class="progress-label" id="raProgressLabel">Sẵn sàng.</div>
       </div>
 
       <div class="card" style="flex:1;display:flex;flex-direction:column;min-height:160px">
@@ -1000,11 +999,11 @@ input[type="file"] { display: none; }
 <!-- Create modal -->
 <div class="modal-overlay" id="createModal" style="display:none" onclick="if(event.target===this)closeModal('createModal')">
   <div class="modal">
-    <h3>Táº¡o project má»›i</h3>
-    <input type="text" id="newProjectName" placeholder="TÃªn project..." onkeydown="if(event.key==='Enter')confirmCreate()">
+    <h3>Tạo project mới</h3>
+    <input type="text" id="newProjectName" placeholder="Tên project..." onkeydown="if(event.key==='Enter')confirmCreate()">
     <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeModal('createModal')">Huá»·</button>
-      <button class="btn-primary" onclick="confirmCreate()">Táº¡o</button>
+      <button class="btn-secondary" onclick="closeModal('createModal')">Huỷ</button>
+      <button class="btn-primary" onclick="confirmCreate()">Tạo</button>
     </div>
   </div>
 </div>
@@ -1012,11 +1011,11 @@ input[type="file"] { display: none; }
 <!-- Rename modal -->
 <div class="modal-overlay" id="renameModal" style="display:none" onclick="if(event.target===this)closeModal('renameModal')">
   <div class="modal">
-    <h3>Äá»•i tÃªn project</h3>
-    <input type="text" id="renameInput" placeholder="TÃªn má»›i..." onkeydown="if(event.key==='Enter')confirmRename()">
+    <h3>Đổi tên project</h3>
+    <input type="text" id="renameInput" placeholder="Tên mới..." onkeydown="if(event.key==='Enter')confirmRename()">
     <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeModal('renameModal')">Huá»·</button>
-      <button class="btn-primary" onclick="confirmRename()">LÆ°u</button>
+      <button class="btn-secondary" onclick="closeModal('renameModal')">Huỷ</button>
+      <button class="btn-primary" onclick="confirmRename()">Lưu</button>
     </div>
   </div>
 </div>
@@ -1024,15 +1023,15 @@ input[type="file"] { display: none; }
 <!-- Save-as-Template modal -->
 <div class="modal-overlay" id="saveTemplateModal" style="display:none" onclick="if(event.target===this)closeModal('saveTemplateModal')">
   <div class="modal">
-    <h3>LÆ°u lÃ m Template</h3>
-    <input type="text" id="templateNameInput" placeholder="TÃªn template..." onkeydown="if(event.key==='Enter')confirmSaveTemplate()">
+    <h3>Lưu làm Template</h3>
+    <input type="text" id="templateNameInput" placeholder="Tên template..." onkeydown="if(event.key==='Enter')confirmSaveTemplate()">
     <div style="font-size:11px;color:var(--muted);line-height:1.6">
-      Sáº½ copy tá»« project hiá»‡n táº¡i:<br>
-      <span style="color:var(--text);font-weight:700">Settings Â· Music Â· Voice</span>
+      Sẽ copy từ project hiện tại:<br>
+      <span style="color:var(--text);font-weight:700">Settings · Music · Voice</span>
     </div>
     <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeModal('saveTemplateModal')">Huá»·</button>
-      <button class="btn-primary" onclick="confirmSaveTemplate()">LÆ°u</button>
+      <button class="btn-secondary" onclick="closeModal('saveTemplateModal')">Huỷ</button>
+      <button class="btn-primary" onclick="confirmSaveTemplate()">Lưu</button>
     </div>
   </div>
 </div>
@@ -1040,11 +1039,11 @@ input[type="file"] { display: none; }
 <!-- Rename Template modal -->
 <div class="modal-overlay" id="renameTemplateModal" style="display:none" onclick="if(event.target===this)closeModal('renameTemplateModal')">
   <div class="modal">
-    <h3>Äá»•i tÃªn Template</h3>
-    <input type="text" id="renameTemplateInput" placeholder="TÃªn má»›i..." onkeydown="if(event.key==='Enter')confirmRenameTemplate()">
+    <h3>Đổi tên Template</h3>
+    <input type="text" id="renameTemplateInput" placeholder="Tên mới..." onkeydown="if(event.key==='Enter')confirmRenameTemplate()">
     <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeModal('renameTemplateModal')">Huá»·</button>
-      <button class="btn-primary" onclick="confirmRenameTemplate()">LÆ°u</button>
+      <button class="btn-secondary" onclick="closeModal('renameTemplateModal')">Huỷ</button>
+      <button class="btn-primary" onclick="confirmRenameTemplate()">Lưu</button>
     </div>
   </div>
 </div>
@@ -1052,40 +1051,40 @@ input[type="file"] { display: none; }
 <input type="file" id="assetInput" style="display:none">
 
 <script>
-// â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── State ─────────────────────────────────────────────────────────────────────
 let state = { projects: [], current: null, activeTab: 'files', es: null, selectedImages: new Set() };
 const enc = (s) => encodeURIComponent(s);
 
 const SETTINGS_SPEC = [
   { section: 'Counts' },
-  { key: 'TOTAL_VIDEOS',       type: 'int',    label: 'Total videos/batch',  desc: 'Sá»‘ video render má»—i batch' },
-  { key: 'IMAGES_PER_VIDEO',   type: 'int',    label: 'áº¢nh/video',           desc: 'Sá»‘ áº£nh dÃ¹ng cho 1 video' },
-  { key: 'MAX_SAME_IMAGE_PER_POSITION_PER_BATCH', type: 'int', label: 'Max láº·p áº£nh/vá»‹ trÃ­', desc: 'Giá»›i háº¡n 1 áº£nh láº·p á»Ÿ cÃ¹ng vá»‹ trÃ­' },
-  { key: 'RANDOM_SEED',        type: 'int_or_none', label: 'Random seed',    desc: 'Trá»‘ng = random tá»± nhiÃªn' },
+  { key: 'TOTAL_VIDEOS',       type: 'int',    label: 'Total videos/batch',  desc: 'Số video render mỗi batch' },
+  { key: 'IMAGES_PER_VIDEO',   type: 'int',    label: 'Ảnh/video',           desc: 'Số ảnh dùng cho 1 video' },
+  { key: 'MAX_SAME_IMAGE_PER_POSITION_PER_BATCH', type: 'int', label: 'Max lặp ảnh/vị trí', desc: 'Giới hạn 1 ảnh lặp ở cùng vị trí' },
+  { key: 'RANDOM_SEED',        type: 'int_or_none', label: 'Random seed',    desc: 'Trống = random tự nhiên' },
   { section: 'Timing' },
-  { key: 'IMAGE_DURATION',     type: 'float',  label: 'Thá»i lÆ°á»£ng áº£nh (s)',  desc: 'Má»—i áº£nh hiá»ƒn thá»‹ bao lÃ¢u' },
-  { key: 'FADE_DURATION',      type: 'float',  label: 'Fade (s)',            desc: 'Thá»i gian chuyá»ƒn cáº£nh' },
+  { key: 'IMAGE_DURATION',     type: 'float',  label: 'Thời lượng ảnh (s)',  desc: 'Mỗi ảnh hiển thị bao lâu' },
+  { key: 'FADE_DURATION',      type: 'float',  label: 'Fade (s)',            desc: 'Thời gian chuyển cảnh' },
   { section: 'Resolution' },
-  { key: 'WIDTH',              type: 'int',    label: 'Width',               desc: 'Chiá»u rá»™ng output' },
-  { key: 'HEIGHT',             type: 'int',    label: 'Height',              desc: 'Chiá»u cao output' },
+  { key: 'WIDTH',              type: 'int',    label: 'Width',               desc: 'Chiều rộng output' },
+  { key: 'HEIGHT',             type: 'int',    label: 'Height',              desc: 'Chiều cao output' },
   { key: 'FPS',                type: 'int',    label: 'FPS',                 desc: 'Frame per second' },
   { section: 'Scale' },
-  { key: 'IMAGE_SCALE_MODE',   type: 'choice:fill,fit,fit_blur_bg', label: 'Scale mode', desc: 'CÃ¡ch scale áº£nh (áº£nh Ä‘Ãºng 9:16 tá»± dÃ¹ng fill)' },
-  { key: 'IMAGE_SCALE_PERCENT',type: 'int',    label: 'Scale % áº£nh chÃ­nh',   desc: 'PhÃ³ng to áº£nh (%)' },
-  { key: 'FIT_BACKGROUND_COLOR',type:'str',    label: 'MÃ u ná»n (fit mode)',  desc: '' },
-  { key: 'BLUR_BACKGROUND_STRENGTH', type:'int', label:'Blur ná»n strength', desc:'8=minimum Â· 30=má» nhiá»u' },
-  { key: 'BLUR_BACKGROUND_BRIGHTNESS', type:'float', label:'Blur ná»n brightness', desc:'-1 â†’ 1' },
-  { key: 'BLUR_BACKGROUND_SATURATION', type:'float', label:'Blur ná»n saturation', desc:'' },
+  { key: 'IMAGE_SCALE_MODE',   type: 'choice:fill,fit,fit_blur_bg', label: 'Scale mode', desc: 'Cách scale ảnh (ảnh đúng 9:16 tự dùng fill)' },
+  { key: 'IMAGE_SCALE_PERCENT',type: 'int',    label: 'Scale % ảnh chính',   desc: 'Phóng to ảnh (%)' },
+  { key: 'FIT_BACKGROUND_COLOR',type:'str',    label: 'Màu nền (fit mode)',  desc: '' },
+  { key: 'BLUR_BACKGROUND_STRENGTH', type:'int', label:'Blur nền strength', desc:'8=minimum · 30=mờ nhiều' },
+  { key: 'BLUR_BACKGROUND_BRIGHTNESS', type:'float', label:'Blur nền brightness', desc:'-1 → 1' },
+  { key: 'BLUR_BACKGROUND_SATURATION', type:'float', label:'Blur nền saturation', desc:'' },
   { section: 'Audio' },
-  { key: 'MUSIC_START_SECONDS',type: 'float',  label: 'Music bá» qua (s)',    desc: 'Skip N giÃ¢y Ä‘áº§u nháº¡c' },
-  { key: 'VOICE_START_SECONDS',type: 'float',  label: 'Voice báº¯t Ä‘áº§u (s)',   desc: 'Voice báº¯t Ä‘áº§u á»Ÿ giÃ¢y thá»©' },
-  { key: 'MUSIC_VOLUME',       type: 'float',  label: 'Volume nháº¡c',         desc: '0.0 â†’ 2.0' },
-  { key: 'VOICE_VOLUME',       type: 'float',  label: 'Volume voice',        desc: '0.0 â†’ 2.0' },
+  { key: 'MUSIC_START_SECONDS',type: 'float',  label: 'Music bỏ qua (s)',    desc: 'Skip N giây đầu nhạc' },
+  { key: 'VOICE_START_SECONDS',type: 'float',  label: 'Voice bắt đầu (s)',   desc: 'Voice bắt đầu ở giây thứ' },
+  { key: 'MUSIC_VOLUME',       type: 'float',  label: 'Volume nhạc',         desc: '0.0 → 2.0' },
+  { key: 'VOICE_VOLUME',       type: 'float',  label: 'Volume voice',        desc: '0.0 → 2.0' },
   { section: 'Misc' },
-  { key: 'AUTO_CLEAN_TEMP',    type: 'bool',   label: 'Auto clean temp',     desc: 'XoÃ¡ _temp sau render thÃ nh cÃ´ng' },
+  { key: 'AUTO_CLEAN_TEMP',    type: 'bool',   label: 'Auto clean temp',     desc: 'Xoá _temp sau render thành công' },
   { section: 'Performance' },
-  { key: 'USE_HW_ENCODER',     type: 'bool',   label: 'Hardware encoder',    desc: 'DÃ¹ng VideoToolbox (Apple Silicon) â€” giáº£m nÃ³ng mÃ¡y' },
-  { key: 'FFMPEG_THREADS',     type: 'int',    label: 'FFmpeg threads',      desc: '0 = auto Â· 4â€“6 Ä‘á»ƒ giáº£m nhiá»‡t' },
+  { key: 'USE_HW_ENCODER',     type: 'bool',   label: 'Hardware encoder',    desc: 'Dùng VideoToolbox (Apple Silicon) — giảm nóng máy' },
+  { key: 'FFMPEG_THREADS',     type: 'int',    label: 'FFmpeg threads',      desc: '0 = auto · 4–6 để giảm nhiệt' },
 ];
 
 const ASSET_CONFIG = [
@@ -1095,7 +1094,7 @@ const ASSET_CONFIG = [
   { kind: 'overlay',     label: 'Overlay',      exts: '.mp4,.mov,.m4v,.mkv,.webm', required: false },
 ];
 
-// â”€â”€ API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── API ───────────────────────────────────────────────────────────────────────
 const api = {
   async get(url)        { const r = await fetch(url); if (!r.ok) throw await r.json(); return r.json(); },
   async post(url, data) { const r = await fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)}); if (!r.ok) throw await r.json(); return r.json(); },
@@ -1106,7 +1105,7 @@ const api = {
   async uploadSingle(url, file, field='file') { const fd = new FormData(); fd.append(field, file); const r = await fetch(url, {method:'POST', body:fd}); if (!r.ok) throw await r.json(); return r.json(); },
 };
 
-// â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Toast ─────────────────────────────────────────────────────────────────────
 const SVG_CHECK = `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>`;
 const SVG_X     = `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
 const SVG_INFO  = `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
@@ -1125,13 +1124,13 @@ function toast(msg, type='') {
   el.addEventListener('click', () => { clearTimeout(t); el.classList.add('toast-exit'); setTimeout(() => el.remove(), 220); });
 }
 
-// â”€â”€ Theme â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Theme ──────────────────────────────────────────────────────────────────────
 function toggleTheme() {
   const isDark = document.documentElement.classList.toggle('dark');
   localStorage.setItem('vidauto_theme', isDark ? 'dark' : 'light');
 }
 
-// â”€â”€ Project dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Project dropdown ───────────────────────────────────────────────────────────
 let _activeDropdown = null;
 function closeProjDropdown() {
   if (_activeDropdown) { _activeDropdown.remove(); _activeDropdown = null; }
@@ -1148,14 +1147,14 @@ function showProjDropdown(e, p) {
   menu.style.left = rect.left + 'px';
   menu.innerHTML = `
     <div class="proj-dropdown-item" data-action="rename">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Äá»•i tÃªn
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Đổi tên
     </div>
     <div class="proj-dropdown-item" data-action="dup">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>NhÃ¢n báº£n
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Nhân bản
     </div>
     <div class="proj-dropdown-divider"></div>
     <div class="proj-dropdown-item danger" data-action="del">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>XoÃ¡ project
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>Xoá project
     </div>`;
   menu.addEventListener('click', async (ev) => {
     const item = ev.target.closest('[data-action]');
@@ -1178,7 +1177,7 @@ function showProjDropdown(e, p) {
   e.stopPropagation();
 }
 
-// â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Init ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
   const saved = localStorage.getItem('vidauto_theme');
   if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -1190,7 +1189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupDropZone();
 });
 
-// â”€â”€ Projects â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Projects ──────────────────────────────────────────────────────────────────
 async function loadProjects() {
   try {
     state.projects = await api.get('/api/projects');
@@ -1207,15 +1206,15 @@ function renderSidebar() {
   const el = document.getElementById('sidebarList');
   el.innerHTML = '';
   if (!state.projects.length) {
-    el.innerHTML = '<div style="padding:16px;color:var(--muted);font-size:11px;text-align:center">ChÆ°a cÃ³ project nÃ o</div>';
+    el.innerHTML = '<div style="padding:16px;color:var(--muted);font-size:11px;text-align:center">Chưa có project nào</div>';
     return;
   }
   for (const p of state.projects) {
     const div = document.createElement('div');
     div.className = 'project-item' + (state.current?.safe === p.safe ? ' active' : '');
     div.innerHTML = `<div class="proj-name">${esc(p.name)}</div>
-      <div class="proj-meta">${p.image_count} áº£nh Â· ${p.rendered_count} rendered</div>
-      <button class="proj-menu-btn" title="TÃ¹y chá»n">
+      <div class="proj-meta">${p.image_count} ảnh · ${p.rendered_count} rendered</div>
+      <button class="proj-menu-btn" title="Tùy chọn">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
       </button>`;
     div.onclick = (e) => { if (!e.target.closest('.proj-menu-btn')) selectProject(p.safe); };
@@ -1226,7 +1225,7 @@ function renderSidebar() {
 
 function renderProjectSelect() {
   const sel = document.getElementById('projectSelect');
-  sel.innerHTML = '<option value="">â€”</option>';
+  sel.innerHTML = '<option value="">—</option>';
   for (const p of state.projects) {
     const opt = document.createElement('option');
     opt.value = p.safe; opt.textContent = p.name;
@@ -1246,7 +1245,7 @@ async function selectProject(safe, reload=true) {
     const hdr = document.getElementById('headerProjectName');
     hdr.textContent = p.name;
     hdr.className = 'active';
-    document.getElementById('projectBadge').textContent = `${p.image_count} áº£nh Â· ${p.rendered_count} rendered`;
+    document.getElementById('projectBadge').textContent = `${p.image_count} ảnh · ${p.rendered_count} rendered`;
     document.getElementById('projectBadge').style.display = '';
     document.getElementById('btnRename').style.display = '';
     document.getElementById('btnDupProject').style.display = '';
@@ -1260,7 +1259,7 @@ async function selectProject(safe, reload=true) {
     renderFiles();
     renderSettings();
     if (state.activeTab === 'render') { loadOutputs(); loadCapacity(); loadNextBatchName(); checkRenderStatus(); }
-  } catch(e) { toast('KhÃ´ng táº£i Ä‘Æ°á»£c project', 'error'); }
+  } catch(e) { toast('Không tải được project', 'error'); }
 }
 
 function resetRenderUI() {
@@ -1268,7 +1267,7 @@ function resetRenderUI() {
   document.getElementById('btnStop').disabled = true;
   document.getElementById('progressBar').style.width = '0%';
   document.getElementById('progressBar').classList.remove('running');
-  document.getElementById('progressLabel').textContent = 'Sáºµn sÃ ng.';
+  document.getElementById('progressLabel').textContent = 'Sẵn sàng.';
   document.getElementById('logBox').innerHTML = '';
 }
 
@@ -1276,7 +1275,7 @@ function onProjectChange(safe) {
   if (safe) selectProject(safe);
   else {
     state.current = null;
-    document.getElementById('headerProjectName').textContent = 'Chá»n project tá»« sidebar';
+    document.getElementById('headerProjectName').textContent = 'Chọn project từ sidebar';
     document.getElementById('headerProjectName').className = '';
     document.getElementById('projectBadge').style.display = 'none';
     document.getElementById('btnRename').style.display = 'none';
@@ -1288,7 +1287,7 @@ function onProjectChange(safe) {
   }
 }
 
-// â”€â”€ Modals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Modals ────────────────────────────────────────────────────────────────────
 function showCreateModal() {
   document.getElementById('newProjectName').value = '';
   document.getElementById('createModal').style.display = 'flex';
@@ -1305,8 +1304,8 @@ async function confirmCreate() {
     state.projects.unshift(p);
     renderSidebar(); renderProjectSelect();
     await selectProject(p.safe);
-    toast('ÄÃ£ táº¡o: ' + p.name, 'success');
-  } catch(e) { toast(e.detail || 'Lá»—i táº¡o project', 'error'); }
+    toast('Đã tạo: ' + p.name, 'success');
+  } catch(e) { toast(e.detail || 'Lỗi tạo project', 'error'); }
 }
 
 function showRenameModal() {
@@ -1323,23 +1322,23 @@ async function confirmRename() {
     closeModal('renameModal');
     state.current = p;
     await loadProjects();
-    toast('ÄÃ£ Ä‘á»•i tÃªn', 'success');
-  } catch(e) { toast(e.detail || 'Lá»—i Ä‘á»•i tÃªn', 'error'); }
+    toast('Đã đổi tên', 'success');
+  } catch(e) { toast(e.detail || 'Lỗi đổi tên', 'error'); }
 }
 
 async function deleteProject() {
   if (!state.current) return;
-  if (!confirm(`XoÃ¡ project "${state.current.name}"?\nThao tÃ¡c nÃ y khÃ´ng thá»ƒ hoÃ n tÃ¡c.`)) return;
+  if (!confirm(`Xoá project "${state.current.name}"?\nThao tác này không thể hoàn tác.`)) return;
   try {
     await api.del(`/api/projects/${state.current.safe}`);
     state.current = null;
     onProjectChange('');
     await loadProjects();
-    toast('ÄÃ£ xoÃ¡ project', 'success');
-  } catch(e) { toast('Lá»—i xoÃ¡ project', 'error'); }
+    toast('Đã xoá project', 'success');
+  } catch(e) { toast('Lỗi xoá project', 'error'); }
 }
 
-// â”€â”€ Tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Tabs ──────────────────────────────────────────────────────────────────────
 function switchTab(name) {
   state.activeTab = name;
   document.querySelectorAll('.tab-btn').forEach((b, i) => {
@@ -1354,13 +1353,13 @@ function switchTab(name) {
   if (name === 'queue') loadQueue();
 }
 
-// â”€â”€ Files tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Files tab ─────────────────────────────────────────────────────────────────
 function renderFiles() { if (!state.current) return; renderImageList(); renderAssets(); }
 
 function renderImageList() {
   const p = state.current;
   const list = document.getElementById('imageList');
-  document.getElementById('imgCount').textContent = (p.images?.length || 0) + ' áº£nh';
+  document.getElementById('imgCount').textContent = (p.images?.length || 0) + ' ảnh';
   list.innerHTML = '';
   for (const img of (p.images || [])) {
     const row = document.createElement('div');
@@ -1374,10 +1373,10 @@ function renderImageList() {
     else { thumb.className = 'img-thumb-placeholder'; thumb.textContent = '?'; }
     const name = document.createElement('span');
     name.className = 'img-name' + (img.exists ? '' : ' missing');
-    name.textContent = img.name + (img.exists ? '' : ' (thiáº¿u)');
+    name.textContent = img.name + (img.exists ? '' : ' (thiếu)');
     name.title = img.name;
     const btn = document.createElement('button');
-    btn.className = 'img-remove'; btn.textContent = 'Ã—'; btn.title = 'XoÃ¡';
+    btn.className = 'img-remove'; btn.textContent = '×'; btn.title = 'Xoá';
     btn.onclick = () => removeSingleImage(img.name);
     row.append(cb, thumb, name, btn);
     list.appendChild(row);
@@ -1406,7 +1405,7 @@ function renderAssets() {
     hint.style.textTransform = 'uppercase';
     if (cfg.required) {
       hint.style.color = '#DC2626';
-      hint.textContent = 'báº¯t buá»™c';
+      hint.textContent = 'bắt buộc';
     } else {
       hint.style.color = 'var(--muted)';
       hint.textContent = 'optional';
@@ -1416,7 +1415,7 @@ function renderAssets() {
     const name = document.createElement('span');
     name.className = 'file-name' + (p[cfg.kind] ? '' : ' file-none');
     name.id = `asset-${cfg.kind}`;
-    name.textContent = p[cfg.kind] || 'ChÆ°a upload';
+    name.textContent = p[cfg.kind] || 'Chưa upload';
     name.style.flex = '1';
 
     const uploadBtn = document.createElement('button');
@@ -1450,12 +1449,12 @@ async function uploadImages(files) {
   if (!state.current || !files.length) return;
   try {
     const res = await api.upload(`/api/projects/${enc(state.current.safe)}/images`, [...files]);
-    toast(`+${res.added.length} áº£nh (total: ${res.total})`, 'success');
+    toast(`+${res.added.length} ảnh (total: ${res.total})`, 'success');
     state.current = await api.get(`/api/projects/${state.current.safe}`);
     renderImageList();
-    document.getElementById('imgCount').textContent = state.current.images.length + ' áº£nh';
-    document.getElementById('projectBadge').textContent = `${state.current.image_count} áº£nh Â· ${state.current.rendered_count} rendered`;
-  } catch(e) { toast(e.detail || 'Lá»—i upload áº£nh', 'error'); }
+    document.getElementById('imgCount').textContent = state.current.images.length + ' ảnh';
+    document.getElementById('projectBadge').textContent = `${state.current.image_count} ảnh · ${state.current.rendered_count} rendered`;
+  } catch(e) { toast(e.detail || 'Lỗi upload ảnh', 'error'); }
 }
 
 async function removeSingleImage(name) {
@@ -1464,33 +1463,33 @@ async function removeSingleImage(name) {
     await api.del(`/api/projects/${enc(state.current.safe)}/images`, { names: [name] });
     state.current = await api.get(`/api/projects/${state.current.safe}`);
     state.selectedImages.delete(name); renderImageList();
-    document.getElementById('imgCount').textContent = state.current.images.length + ' áº£nh';
-  } catch(e) { toast('Lá»—i xoÃ¡ áº£nh', 'error'); }
+    document.getElementById('imgCount').textContent = state.current.images.length + ' ảnh';
+  } catch(e) { toast('Lỗi xoá ảnh', 'error'); }
 }
 
 async function removeSelectedImages() {
-  if (!state.current || !state.selectedImages.size) return toast('ChÆ°a chá»n áº£nh nÃ o');
+  if (!state.current || !state.selectedImages.size) return toast('Chưa chọn ảnh nào');
   try {
     await api.del(`/api/projects/${enc(state.current.safe)}/images`, { names: [...state.selectedImages] });
     state.selectedImages.clear();
     state.current = await api.get(`/api/projects/${state.current.safe}`);
     renderImageList();
-    document.getElementById('imgCount').textContent = state.current.images.length + ' áº£nh';
-    toast('ÄÃ£ xoÃ¡', 'success');
-  } catch(e) { toast('Lá»—i xoÃ¡', 'error'); }
+    document.getElementById('imgCount').textContent = state.current.images.length + ' ảnh';
+    toast('Đã xoá', 'success');
+  } catch(e) { toast('Lỗi xoá', 'error'); }
 }
 
 async function clearAllImages() {
   if (!state.current) return;
-  if (!confirm('XoÃ¡ táº¥t cáº£ áº£nh?')) return;
+  if (!confirm('Xoá tất cả ảnh?')) return;
   try {
     await api.del(`/api/projects/${enc(state.current.safe)}/images`, { names: state.current.images.map(i => i.name) });
     state.selectedImages.clear();
     state.current = await api.get(`/api/projects/${state.current.safe}`);
     renderImageList();
-    document.getElementById('imgCount').textContent = '0 áº£nh';
-    toast('ÄÃ£ xoÃ¡ háº¿t', 'success');
-  } catch(e) { toast('Lá»—i', 'error'); }
+    document.getElementById('imgCount').textContent = '0 ảnh';
+    toast('Đã xoá hết', 'success');
+  } catch(e) { toast('Lỗi', 'error'); }
 }
 
 let _pendingAssetKind = null;
@@ -1503,8 +1502,8 @@ function triggerAssetUpload(kind, exts) {
     try {
       await api.uploadSingle(`/api/projects/${enc(state.current.safe)}/asset/${_pendingAssetKind}`, input.files[0]);
       state.current = await api.get(`/api/projects/${state.current.safe}`);
-      renderAssets(); toast('Upload thÃ nh cÃ´ng', 'success');
-    } catch(e) { toast(e.detail || 'Lá»—i upload', 'error'); }
+      renderAssets(); toast('Upload thành công', 'success');
+    } catch(e) { toast(e.detail || 'Lỗi upload', 'error'); }
     input.value = '';
   };
   input.click();
@@ -1515,11 +1514,11 @@ async function clearAsset(kind) {
   try {
     await api.del(`/api/projects/${enc(state.current.safe)}/asset/${kind}`);
     state.current = await api.get(`/api/projects/${state.current.safe}`);
-    renderAssets(); toast('ÄÃ£ xoÃ¡', 'success');
-  } catch(e) { toast('Lá»—i', 'error'); }
+    renderAssets(); toast('Đã xoá', 'success');
+  } catch(e) { toast('Lỗi', 'error'); }
 }
 
-// â”€â”€ Settings tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Settings tab ──────────────────────────────────────────────────────────────
 function renderSettings() {
   if (!state.current) return;
   const grid = document.getElementById('settingsGrid');
@@ -1577,8 +1576,8 @@ async function saveSettings() {
   try {
     await api.put(`/api/projects/${enc(state.current.safe)}/config`, collectSettings());
     state.current = await api.get(`/api/projects/${state.current.safe}`);
-    toast('ÄÃ£ lÆ°u settings', 'success');
-  } catch(e) { toast(e.detail || 'Lá»—i lÆ°u', 'error'); }
+    toast('Đã lưu settings', 'success');
+  } catch(e) { toast(e.detail || 'Lỗi lưu', 'error'); }
 }
 
 const FACTORY_DEFAULTS = {
@@ -1596,7 +1595,7 @@ function saveAsDefault() {
   if (!state.current) return;
   const cfg = collectSettings();
   localStorage.setItem('vidauto_default_settings', JSON.stringify(cfg));
-  toast('ÄÃ£ lÆ°u lÃ m máº·c Ä‘á»‹nh!', 'success');
+  toast('Đã lưu làm mặc định!', 'success');
 }
 
 async function resetSettings() {
@@ -1605,16 +1604,16 @@ async function resetSettings() {
   const defaults = saved ? JSON.parse(saved) : FACTORY_DEFAULTS;
   state.current.config = {...FACTORY_DEFAULTS, ...defaults};
   renderSettings();
-  toast('Reset xong â€” nháº¥n LÆ°u Ä‘á»ƒ Ã¡p dá»¥ng');
+  toast('Reset xong — nhấn Lưu để áp dụng');
 }
 
-// â”€â”€ Render tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Render tab ────────────────────────────────────────────────────────────────
 async function startRender() {
   if (!state.current) return;
   try {
     await api.put(`/api/projects/${enc(state.current.safe)}/config`, collectSettings());
     state.current = await api.get(`/api/projects/${state.current.safe}`);
-  } catch(e) { toast('Lá»—i lÆ°u settings: ' + (e.detail || e), 'error'); return; }
+  } catch(e) { toast('Lỗi lưu settings: ' + (e.detail || e), 'error'); return; }
 
   const batchName = document.getElementById('inputBatchName').value.trim();
   const outputDir = document.getElementById('inputOutputDir').value.trim();
@@ -1627,10 +1626,10 @@ async function startRender() {
     document.getElementById('btnStop').disabled = false;
     document.getElementById('logBox').innerHTML = '';
     document.getElementById('progressBar').classList.add('running');
-    setProgress(0, 0, 'Äang khá»Ÿi Ä‘á»™ng...');
+    setProgress(0, 0, 'Đang khởi động...');
     connectSSE();
-    toast('Render báº¯t Ä‘áº§u!', 'success');
-  } catch(e) { toast(e.detail || 'KhÃ´ng thá»ƒ báº¯t Ä‘áº§u render', 'error'); }
+    toast('Render bắt đầu!', 'success');
+  } catch(e) { toast(e.detail || 'Không thể bắt đầu render', 'error'); }
 }
 
 async function stopRender() {
@@ -1643,7 +1642,7 @@ async function stopRender() {
         btn.disabled = !_workerOnline;
         document.getElementById('btnStop').disabled = true;
         document.getElementById('progressBar').classList.remove('running');
-        setProgress(0, 0, 'ÄÃ£ dá»«ng');
+        setProgress(0, 0, 'Đã dừng');
       }
     }, 1500);
   } catch(e) {}
@@ -1664,7 +1663,7 @@ function connectSSE() {
       document.getElementById('btnStop').disabled = true;
       document.getElementById('progressBar').classList.remove('running');
       const ok = msg.status === 'done';
-      setProgress(ok ? 1 : 0, 1, ok ? 'HoÃ n táº¥t!' : msg.status);
+      setProgress(ok ? 1 : 0, 1, ok ? 'Hoàn tất!' : msg.status);
       if (ok) {
         loadOutputs(); loadCapacity(); loadNextBatchName();
         if (state.activeTab === 'queue') loadQueue(); else loadQueue();
@@ -1673,7 +1672,7 @@ function connectSSE() {
             const p = state.projects.find(x => x.safe === state.current.safe);
             if (p) {
               state.current.rendered_count = p.rendered_count;
-              document.getElementById('projectBadge').textContent = `${p.image_count} áº£nh Â· ${p.rendered_count} rendered`;
+              document.getElementById('projectBadge').textContent = `${p.image_count} ảnh · ${p.rendered_count} rendered`;
               loadCapacity();
             }
           }
@@ -1687,8 +1686,8 @@ function connectSSE() {
 function appendLog(msg) {
   const box = document.getElementById('logBox');
   const line = document.createElement('div');
-  if (msg.startsWith('Lá»–I') || msg.includes('failed') || msg.includes('Error')) line.className = 'log-err';
-  else if (msg.startsWith('âœ“')) line.className = 'log-ok';
+  if (msg.startsWith('LỖI') || msg.includes('failed') || msg.includes('Error')) line.className = 'log-err';
+  else if (msg.startsWith('✓')) line.className = 'log-ok';
   else if (msg.startsWith('$')) line.className = 'log-cmd';
   else if (msg.startsWith('===')) line.className = 'log-info';
   line.textContent = msg;
@@ -1699,7 +1698,7 @@ function appendLog(msg) {
 function setProgress(done, total, label) {
   const pct = total > 0 ? (done / total * 100).toFixed(1) : 0;
   document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = label || (total > 0 ? `${done}/${total}` : 'Sáºµn sÃ ng.');
+  document.getElementById('progressLabel').textContent = label || (total > 0 ? `${done}/${total}` : 'Sẵn sàng.');
 }
 
 async function checkRenderStatus() {
@@ -1710,19 +1709,19 @@ async function checkRenderStatus() {
       document.getElementById('btnStart').disabled = true;
       document.getElementById('btnStop').disabled = false;
       document.getElementById('progressBar').classList.add('running');
-      setProgress(s.progress.done, s.progress.total, s.progress.label || 'Äang render...');
+      setProgress(s.progress.done, s.progress.total, s.progress.label || 'Đang render...');
       if (!state.es) connectSSE();
     } else if (s.status === 'done') {
       document.getElementById('btnStart').disabled = false;
       document.getElementById('btnStop').disabled = true;
       document.getElementById('progressBar').classList.remove('running');
-      setProgress(1, 1, 'HoÃ n táº¥t!');
+      setProgress(1, 1, 'Hoàn tất!');
     } else {
       document.getElementById('btnStart').disabled = !_workerOnline;
       document.getElementById('btnStop').disabled = true;
       document.getElementById('progressBar').classList.remove('running');
-      const labels = { error:'Lá»—i', stopped:'ÄÃ£ dá»«ng', cancelled:'ÄÃ£ huá»·', cancelling:'Äang dá»«ng...' };
-      setProgress(0, 0, labels[s.status] || 'Sáºµn sÃ ng.');
+      const labels = { error:'Lỗi', stopped:'Đã dừng', cancelled:'Đã huỷ', cancelling:'Đang dừng...' };
+      setProgress(0, 0, labels[s.status] || 'Sẵn sàng.');
     }
   } catch(e) {}
 }
@@ -1730,10 +1729,10 @@ async function checkRenderStatus() {
 async function openOutputFolder() {
   if (!state.current) return;
   try { await api.post(`/api/projects/${enc(state.current.safe)}/open-folder`, {}); }
-  catch(e) { toast('KhÃ´ng má»Ÿ Ä‘Æ°á»£c folder', 'error'); }
+  catch(e) { toast('Không mở được folder', 'error'); }
 }
 
-// â”€â”€ Job Queue â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Job Queue ─────────────────────────────────────────────────────────────────
 async function loadQueue() {
   if (!state.current) return;
   try {
@@ -1748,16 +1747,16 @@ async function loadQueue() {
 
 function renderQueue(jobs) {
   const el = document.getElementById('queueList');
-  if (!jobs.length) { el.innerHTML = '<span style="color:var(--muted);font-size:11px">ChÆ°a cÃ³ job nÃ o.</span>'; return; }
+  if (!jobs.length) { el.innerHTML = '<span style="color:var(--muted);font-size:11px">Chưa có job nào.</span>'; return; }
   el.innerHTML = jobs.map(j => {
     const date = j.created_at ? j.created_at.replace('T', ' ').slice(0, 16) : '';
-    const prog = j.progress_total > 0 ? ` Â· ${j.progress_done}/${j.progress_total}` : '';
+    const prog = j.progress_total > 0 ? ` · ${j.progress_done}/${j.progress_total}` : '';
     const active = ['pending','running','cancelling'].includes(j.status);
     const canCancel = ['pending','running'].includes(j.status);
     return `<div class="job-row">
       <div class="job-info">
         <div class="job-name" title="${esc(j.batch_name)}">${esc(j.batch_name) || j.id}</div>
-        <div class="job-meta">${date}${prog}${j.progress_label ? ' Â· ' + esc(j.progress_label) : ''}</div>
+        <div class="job-meta">${date}${prog}${j.progress_label ? ' · ' + esc(j.progress_label) : ''}</div>
       </div>
       <span class="job-status ${j.status}">${j.status}</span>
       ${canCancel ? `<button class="btn-danger btn-sm" onclick="cancelJob('${j.id}')">Cancel</button>` : ''}
@@ -1769,29 +1768,29 @@ function renderQueue(jobs) {
 async function cancelJob(id) {
   try {
     await api.post(`/api/jobs/${id}/cancel`, {});
-    toast('ÄÃ£ cancel job', 'success');
+    toast('Đã cancel job', 'success');
     loadQueue();
     checkRenderStatus();
     setTimeout(() => {
       document.getElementById('btnStart').disabled = !_workerOnline;
       document.getElementById('btnStop').disabled = true;
-      setProgress(0, 0, 'ÄÃ£ huá»·');
+      setProgress(0, 0, 'Đã huỷ');
     }, 500);
-  } catch(e) { toast(e.detail || 'Lá»—i', 'error'); }
+  } catch(e) { toast(e.detail || 'Lỗi', 'error'); }
 }
 
 async function redoJob(id) {
   try {
     const r = await api.post(`/api/jobs/${id}/redo`, {});
-    toast('ÄÃ£ thÃªm láº¡i vÃ o queue!', 'success');
+    toast('Đã thêm lại vào queue!', 'success');
     loadQueue();
     switchTab('render');
     connectSSE();
     document.getElementById('btnStart').disabled = true;
     document.getElementById('btnStop').disabled = false;
     document.getElementById('progressBar').classList.add('running');
-    setProgress(0, 0, 'Äang chá» worker...');
-  } catch(e) { toast(e.detail || 'Lá»—i', 'error'); }
+    setProgress(0, 0, 'Đang chờ worker...');
+  } catch(e) { toast(e.detail || 'Lỗi', 'error'); }
 }
 
 async function loadOutputs() {
@@ -1803,7 +1802,7 @@ async function loadOutputs() {
   try {
     const batches = await api.get(url);
     const el = document.getElementById('outputsList');
-    if (!batches.length) { el.innerHTML = '<span style="color:var(--muted);font-size:11px">ChÆ°a cÃ³ video nÃ o.</span>'; return; }
+    if (!batches.length) { el.innerHTML = '<span style="color:var(--muted);font-size:11px">Chưa có video nào.</span>'; return; }
     el.innerHTML = '';
     for (const b of batches) {
       const div = document.createElement('div');
@@ -1835,10 +1834,10 @@ async function loadCapacity() {
     const total = c.total_ordered > 0 ? c.total_ordered : 0;
     const pct = total > 0 ? Math.round(rendered / total * 100) : 0;
     el.innerHTML =
-      `Capacity: <span style="color:var(--text);font-weight:700">${c.effective_max}</span> combo cÃ²n láº¡i` +
-      ` &nbsp;Â·&nbsp; Ä‘Ã£ render <span style="color:var(--primary);font-weight:600">${rendered}</span>` +
+      `Capacity: <span style="color:var(--text);font-weight:700">${c.effective_max}</span> combo còn lại` +
+      ` &nbsp;·&nbsp; đã render <span style="color:var(--primary);font-weight:600">${rendered}</span>` +
       (total > 0 ? `/${total} <span style="color:var(--muted)">(${pct}%)</span>` : ' videos');
-  } catch(e) { el.textContent = 'â€”'; }
+  } catch(e) { el.textContent = '—'; }
 }
 
 async function browseOutputDir() {
@@ -1846,9 +1845,9 @@ async function browseOutputDir() {
   btn.disabled = true;
   try {
     const r = await api.get('/api/browse-folder');
-    if (r.path) { document.getElementById('inputOutputDir').value = r.path; saveOutputDir(r.path); toast('ÄÃ£ chá»n thÆ° má»¥c', 'success'); }
+    if (r.path) { document.getElementById('inputOutputDir').value = r.path; saveOutputDir(r.path); toast('Đã chọn thư mục', 'success'); }
   } catch(e) {
-    if (e.detail !== 'Cancelled') toast('KhÃ´ng má»Ÿ Ä‘Æ°á»£c dialog', 'error');
+    if (e.detail !== 'Cancelled') toast('Không mở được dialog', 'error');
   } finally { btn.disabled = false; }
 }
 
@@ -1858,11 +1857,11 @@ async function loadNextBatchName() {
   if (!el) return;
   try {
     const r = await api.get(`/api/projects/${enc(state.current.safe)}/next-batch-name`);
-    el.placeholder = `${r.name}  (Ä‘á»ƒ trá»‘ng â†’ tá»± táº¡o)`;
-  } catch(e) { el.placeholder = 'Ä‘á»ƒ trá»‘ng â†’ tá»± táº¡o'; }
+    el.placeholder = `${r.name}  (để trống → tự tạo)`;
+  } catch(e) { el.placeholder = 'để trống → tự tạo'; }
 }
 
-// â”€â”€ Templates â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Templates ─────────────────────────────────────────────────────────────────
 let _templates = [];
 let _renamingTemplateId = null;
 
@@ -1876,30 +1875,30 @@ async function loadTemplates() {
 function renderTemplates() {
   const el = document.getElementById('templateList');
   if (!_templates.length) {
-    el.innerHTML = '<div class="tmpl-empty">ChÆ°a cÃ³ template</div>';
+    el.innerHTML = '<div class="tmpl-empty">Chưa có template</div>';
     return;
   }
   el.innerHTML = '';
   for (const t of _templates) {
     const div = document.createElement('div');
     div.className = 'tmpl-item';
-    const meta = [t.music ? `â™« ${esc(t.music)}` : '', t.voice ? `ðŸŽ¤ ${esc(t.voice)}` : '']
-      .filter(Boolean).join('  Â·  ') || '<span style="color:var(--muted)">Chá»‰ settings</span>';
+    const meta = [t.music ? `♫ ${esc(t.music)}` : '', t.voice ? `🎤 ${esc(t.voice)}` : '']
+      .filter(Boolean).join('  ·  ') || '<span style="color:var(--muted)">Chỉ settings</span>';
     div.innerHTML = `
       <div class="tmpl-name">${esc(t.name)}</div>
       <div class="tmpl-meta">${meta}</div>
       <div class="tmpl-actions">
-        <button class="btn-primary btn-sm" onclick="applyTemplate('${t.id}')" title="Ãp vÃ o project hiá»‡n táº¡i">Apply</button>
-        <button class="btn-secondary btn-sm" onclick="showRenameTemplateModal('${t.id}','${esc(t.name)}')" title="Äá»•i tÃªn">âœŽ</button>
-        <button class="btn-secondary btn-sm" onclick="dupTemplate('${t.id}')" title="Duplicate">âŠ•</button>
-        <button class="btn-danger btn-sm" onclick="deleteTemplate('${t.id}')" title="XoÃ¡">Ã—</button>
+        <button class="btn-primary btn-sm" onclick="applyTemplate('${t.id}')" title="Áp vào project hiện tại">Apply</button>
+        <button class="btn-secondary btn-sm" onclick="showRenameTemplateModal('${t.id}','${esc(t.name)}')" title="Đổi tên">✎</button>
+        <button class="btn-secondary btn-sm" onclick="dupTemplate('${t.id}')" title="Duplicate">⊕</button>
+        <button class="btn-danger btn-sm" onclick="deleteTemplate('${t.id}')" title="Xoá">×</button>
       </div>`;
     el.appendChild(div);
   }
 }
 
 function showSaveTemplateModal() {
-  if (!state.current) { toast('Chá»n project trÆ°á»›c', 'error'); return; }
+  if (!state.current) { toast('Chọn project trước', 'error'); return; }
   document.getElementById('templateNameInput').value = state.current.name;
   document.getElementById('saveTemplateModal').style.display = 'flex';
   setTimeout(() => document.getElementById('templateNameInput').focus(), 50);
@@ -1913,22 +1912,22 @@ async function confirmSaveTemplate() {
     closeModal('saveTemplateModal');
     _templates.unshift(t);
     renderTemplates();
-    toast(`ÄÃ£ lÆ°u template "${t.name}"`, 'success');
-  } catch(e) { toast(e.detail || 'Lá»—i lÆ°u template', 'error'); }
+    toast(`Đã lưu template "${t.name}"`, 'success');
+  } catch(e) { toast(e.detail || 'Lỗi lưu template', 'error'); }
 }
 
 async function applyTemplate(tid) {
-  if (!state.current) { toast('Chá»n project trÆ°á»›c', 'error'); return; }
+  if (!state.current) { toast('Chọn project trước', 'error'); return; }
   const t = _templates.find(x => x.id === tid);
   if (!t) return;
-  if (!confirm(`Ãp template "${t.name}" vÃ o project "${state.current.name}"?\nSettings, music, voice sáº½ Ä‘Æ°á»£c cáº­p nháº­t â€” áº£nh giá»¯ nguyÃªn.`)) return;
+  if (!confirm(`Áp template "${t.name}" vào project "${state.current.name}"?\nSettings, music, voice sẽ được cập nhật — ảnh giữ nguyên.`)) return;
   try {
     const updated = await api.post(`/api/projects/${enc(state.current.safe)}/apply-template/${tid}`, {});
     state.current = updated;
     renderFiles();
     renderSettings();
-    toast(`ÄÃ£ Ã¡p template "${t.name}"`, 'success');
-  } catch(e) { toast(e.detail || 'Lá»—i apply template', 'error'); }
+    toast(`Đã áp template "${t.name}"`, 'success');
+  } catch(e) { toast(e.detail || 'Lỗi apply template', 'error'); }
 }
 
 function showRenameTemplateModal(tid, currentName) {
@@ -1947,9 +1946,9 @@ async function confirmRenameTemplate() {
     const idx = _templates.findIndex(t => t.id === _renamingTemplateId);
     if (idx >= 0) _templates[idx] = updated;
     renderTemplates();
-    toast('ÄÃ£ Ä‘á»•i tÃªn template', 'success');
+    toast('Đã đổi tên template', 'success');
     _renamingTemplateId = null;
-  } catch(e) { toast(e.detail || 'Lá»—i Ä‘á»•i tÃªn', 'error'); }
+  } catch(e) { toast(e.detail || 'Lỗi đổi tên', 'error'); }
 }
 
 async function dupTemplate(tid) {
@@ -1957,22 +1956,22 @@ async function dupTemplate(tid) {
     const newT = await api.post(`/api/templates/${tid}/duplicate`, {});
     _templates.push(newT);
     renderTemplates();
-    toast(`ÄÃ£ duplicate â†’ "${newT.name}"`, 'success');
-  } catch(e) { toast(e.detail || 'Lá»—i duplicate template', 'error'); }
+    toast(`Đã duplicate → "${newT.name}"`, 'success');
+  } catch(e) { toast(e.detail || 'Lỗi duplicate template', 'error'); }
 }
 
 async function deleteTemplate(tid) {
   const t = _templates.find(x => x.id === tid);
-  if (!t || !confirm(`XoÃ¡ template "${t.name}"?`)) return;
+  if (!t || !confirm(`Xoá template "${t.name}"?`)) return;
   try {
     await api.del(`/api/templates/${tid}`);
     _templates = _templates.filter(x => x.id !== tid);
     renderTemplates();
-    toast('ÄÃ£ xoÃ¡ template', 'success');
-  } catch(e) { toast(e.detail || 'Lá»—i xoÃ¡ template', 'error'); }
+    toast('Đã xoá template', 'success');
+  } catch(e) { toast(e.detail || 'Lỗi xoá template', 'error'); }
 }
 
-// â”€â”€ Worker status â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Worker status ─────────────────────────────────────────────────────────────
 let _workerOnline = false;
 
 async function pollWorkerStatus() {
@@ -1997,33 +1996,33 @@ async function pollWorkerStatus() {
   if (banner) banner.style.display = _workerOnline ? 'none' : '';
   if (btnStart) {
     const status = document.getElementById('progressLabel')?.textContent || '';
-    const isRendering = status.includes('Äang') || status.includes('...');
+    const isRendering = status.includes('Đang') || status.includes('...');
     if (!isRendering) btnStart.disabled = !_workerOnline;
   }
 }
 
 setInterval(pollWorkerStatus, 15000);
 
-// â”€â”€ Duplicate project â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Duplicate project ─────────────────────────────────────────────────────────
 async function duplicateProject() {
   if (!state.current) return;
   try {
     const newP = await api.post(`/api/projects/${enc(state.current.safe)}/duplicate`, {});
-    toast(`ÄÃ£ duplicate â†’ "${newP.name}"`, 'success');
+    toast(`Đã duplicate → "${newP.name}"`, 'success');
     await loadProjects();
     await selectProject(newP.safe);
-  } catch(e) { toast(e.detail || 'Lá»—i duplicate project', 'error'); }
+  } catch(e) { toast(e.detail || 'Lỗi duplicate project', 'error'); }
 }
 
-// â”€â”€ Utils â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Utils ─────────────────────────────────────────────────────────────────────
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// â”€â”€ Save output dir per-project â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Save output dir per-project ───────────────────────────────────────────────
 function saveOutputDir(val) {
   if (state.current) localStorage.setItem(`vidauto_output_dir_${state.current.safe}`, val);
 }
 
-// â”€â”€ Replace Audio View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Replace Audio View ────────────────────────────────────────────────────────
 let _raUploadedPaths = { music: '', voice: '' };
 let _raAbortController = null;
 
@@ -2051,14 +2050,14 @@ async function loadReplaceAudioBatches() {
   try {
     const batches = await api.get('/api/all-batches');
     const sel = document.getElementById('raBatchSelect');
-    sel.innerHTML = '<option value="">â€” chá»n batch â€”</option>';
+    sel.innerHTML = '<option value="">— chọn batch —</option>';
     for (const b of batches) {
       const opt = document.createElement('option');
       opt.value = b.path;
-      opt.textContent = `${b.batch}  (${b.count} videos)  Â·  ${b.path}`;
+      opt.textContent = `${b.batch}  (${b.count} videos)  ·  ${b.path}`;
       sel.appendChild(opt);
     }
-    if (!batches.length) sel.innerHTML = '<option value="">ChÆ°a cÃ³ batch nÃ o</option>';
+    if (!batches.length) sel.innerHTML = '<option value="">Chưa có batch nào</option>';
   } catch(e) { console.error('loadReplaceAudioBatches', e); }
 }
 
@@ -2068,12 +2067,12 @@ function onRaBatchChange(path) {
 
 function populateRaProjectSelect() {
   const sel = document.getElementById('raProjectSelect');
-  sel.innerHTML = '<option value="">â€” chá»n project â€”</option>';
+  sel.innerHTML = '<option value="">— chọn project —</option>';
   for (const p of state.projects) {
     const opt = document.createElement('option');
     opt.value = p.safe;
     const hasAudio = p.music && p.voice;
-    opt.textContent = p.name + (hasAudio ? '' : '  âš  thiáº¿u audio');
+    opt.textContent = p.name + (hasAudio ? '' : '  ⚠ thiếu audio');
     sel.appendChild(opt);
   }
   if (state.current) sel.value = state.current.safe;
@@ -2128,7 +2127,7 @@ async function browseRaDir(targetId) {
       if (targetId === 'raInputDir') document.getElementById('raBatchSelect').value = '';
     }
   } catch(e) {
-    if (e.detail !== 'Cancelled') toast('KhÃ´ng má»Ÿ Ä‘Æ°á»£c dialog', 'error');
+    if (e.detail !== 'Cancelled') toast('Không mở được dialog', 'error');
   } finally { btn.disabled = false; }
 }
 
@@ -2149,7 +2148,7 @@ async function uploadRaAudio(kind) {
       span.textContent = data.name;
       span.style.color = 'var(--success)';
       toast(`Uploaded ${kind}`, 'success');
-    } catch(e) { toast(e.detail || 'Lá»—i upload', 'error'); }
+    } catch(e) { toast(e.detail || 'Lỗi upload', 'error'); }
   };
   input.click();
 }
@@ -2165,7 +2164,7 @@ async function runReplaceAudio() {
   const limitRaw   = document.getElementById('raLimit').value.trim();
   const limit      = limitRaw ? parseInt(limitRaw) : null;
 
-  if (!inputDir) { toast('ChÆ°a chá»n thÆ° má»¥c input', 'error'); return; }
+  if (!inputDir) { toast('Chưa chọn thư mục input', 'error'); return; }
 
   const nameSuffix = document.getElementById('raNameSuffix').value.trim();
   const projSafe   = document.getElementById('raProjectSelect').value;
@@ -2178,14 +2177,14 @@ async function runReplaceAudio() {
   if (limit) payload.limit = limit;
 
   if (musicSrc === 'project' || voiceSrc === 'project') {
-    if (!projSafe) { toast('Chá»n project Ä‘á»ƒ láº¥y audio tá»« project', 'error'); return; }
+    if (!projSafe) { toast('Chọn project để lấy audio từ project', 'error'); return; }
   }
   if (musicSrc === 'upload') {
-    if (!_raUploadedPaths.music) { toast('ChÆ°a upload music', 'error'); return; }
+    if (!_raUploadedPaths.music) { toast('Chưa upload music', 'error'); return; }
     payload.music_path = _raUploadedPaths.music;
   }
   if (voiceSrc === 'upload') {
-    if (!_raUploadedPaths.voice) { toast('ChÆ°a upload voice', 'error'); return; }
+    if (!_raUploadedPaths.voice) { toast('Chưa upload voice', 'error'); return; }
     payload.voice_path = _raUploadedPaths.voice;
   }
 
@@ -2193,7 +2192,7 @@ async function runReplaceAudio() {
   document.getElementById('raBtnStop').disabled = false;
   document.getElementById('raLogBox').innerHTML = '';
   document.getElementById('raProgressBar').classList.add('running');
-  document.getElementById('raProgressLabel').textContent = 'Äang cháº¡y...';
+  document.getElementById('raProgressLabel').textContent = 'Đang chạy...';
 
   _raAbortController = new AbortController();
 
@@ -2223,13 +2222,13 @@ async function runReplaceAudio() {
           if (msg.type === 'log')      appendRaLog(msg.msg);
           else if (msg.type === 'progress') setRaProgress(msg.done, msg.total, msg.label);
           else if (msg.type === 'done') {
-            toast(`${msg.ok} videos Â· ${msg.output_dir}`, 'success');
+            toast(`${msg.ok} videos · ${msg.output_dir}`, 'success');
           }
         } catch(_) {}
       }
     }
   } catch(e) {
-    if (e.name === 'AbortError') appendRaLog('ÄÃ£ dá»«ng');
+    if (e.name === 'AbortError') appendRaLog('Đã dừng');
     else toast(e.detail || String(e), 'error');
   } finally {
     document.getElementById('raBtnRun').disabled  = false;
@@ -2242,15 +2241,15 @@ async function runReplaceAudio() {
 function stopReplaceAudio() {
   if (_raAbortController) _raAbortController.abort();
   api.post('/api/replace-audio/stop', {}).catch(() => {});
-  appendRaLog('Äang dá»«ng...');
+  appendRaLog('Đang dừng...');
 }
 
 function appendRaLog(msg) {
   const box  = document.getElementById('raLogBox');
   const line = document.createElement('div');
-  if (msg.startsWith('âœ—') || msg.includes('Lá»—i') || msg.toLowerCase().includes('error'))
+  if (msg.startsWith('✗') || msg.includes('Lỗi') || msg.toLowerCase().includes('error'))
     line.className = 'log-err';
-  else if (msg.startsWith('âœ“') || msg.startsWith('=== DONE'))
+  else if (msg.startsWith('✓') || msg.startsWith('=== DONE'))
     line.className = 'log-ok';
   else if (msg.startsWith('==='))
     line.className = 'log-info';
@@ -2262,7 +2261,7 @@ function appendRaLog(msg) {
 function setRaProgress(done, total, label) {
   const pct = total > 0 ? (done / total * 100).toFixed(1) : 0;
   document.getElementById('raProgressBar').style.width = pct + '%';
-  document.getElementById('raProgressLabel').textContent = label || (total > 0 ? `${done}/${total}` : 'Sáºµn sÃ ng.');
+  document.getElementById('raProgressLabel').textContent = label || (total > 0 ? `${done}/${total}` : 'Sẵn sàng.');
 }
 </script>
 </body>
