@@ -6,3 +6,4 @@ venv/
 .venv/
 .codegraph/
 *.log
+data/

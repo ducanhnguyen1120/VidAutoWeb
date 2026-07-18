@@ -11,7 +11,7 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
-APPDATA_DIR = Path(os.environ.get("APPDATA", Path.home())) / "AutoVideoMaker"
+APPDATA_DIR = Path(__file__).parent / "data"
 PROJECTS_DIR = APPDATA_DIR / "projects"
 PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
 
